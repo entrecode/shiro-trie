@@ -230,5 +230,9 @@ describe('shiro-trie node module', function() {
       assert.equal(shiroTrie.new().add('newsletter:view,create,edit,delete').check('newsletter:view,create,any,edit,delete'), false);
     });
   });
-
+  
+  describe('', function() {
+    
+  });
+  
 });

@@ -2,16 +2,16 @@
 
 var _ = require('lodash');
 
-var ShiroTree = function() {
+var ShiroTrie = function() {
   this.data = {};
   return this;
 };
-ShiroTree.prototype.reset = function() {
+ShiroTrie.prototype.reset = function() {
   this.data = {};
   return this;
 };
 
-ShiroTree.prototype.add = function() {
+ShiroTrie.prototype.add = function() {
   var args = _.flatten(arguments);
   var arg;
   for (arg in args) {
@@ -22,17 +22,17 @@ ShiroTree.prototype.add = function() {
   return this;
 };
 
-ShiroTree.prototype.check = function(string) {
+ShiroTrie.prototype.check = function(string) {
   return _check(this.data, string.split(':'));
 };
 
-ShiroTree.prototype.get = function() {
+ShiroTrie.prototype.get = function() {
   return this.data;
 };
 
 module.exports = {
   new: function() {
-    return new ShiroTree();
+    return new ShiroTrie();
   }
 };
 
@@ -46,8 +46,8 @@ function _add(trie, array) {
         node[values[j]] = {};
       }
       if (values.length > 1) { // if we have a comma separated permission list, we have to go recursive
-        goRecursive = goRecursive || array.slice(i+1); // save the remaining permission array (subtree has to be appended to each one)
-        node[values[j]] = _add(node[values[j]], goRecursive); // call recursion for this subtree
+        goRecursive = goRecursive || array.slice(i+1); // save the remaining permission array (subTrie has to be appended to each one)
+        node[values[j]] = _add(node[values[j]], goRecursive); // call recursion for this subTrie
         i = array.length; // break outer loop
       } else { // if we don't need recursion, we just go deeper
         prevNode = node;
@@ -55,7 +55,7 @@ function _add(trie, array) {
       }
     }
   }
-  if (!goRecursive && (!prevNode || !prevNode.hasOwnProperty('*'))) { // if we did not went recursive, we close the tree with a * leaf
+  if (!goRecursive && (!prevNode || !prevNode.hasOwnProperty('*'))) { // if we did not went recursive, we close the Trie with a * leaf
     node['*'] = {};
   }
   return trie;

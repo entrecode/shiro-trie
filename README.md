@@ -34,7 +34,7 @@ account1.check('nas:timeCapsule:write'); // false
 
 ## License
 
-MIT © [Ruben Deyhle](https://entrecode.de)
+MIT © [entrecode GmbH](https://entrecode.de)
 
 
 [npm-image]: https://badge.fury.io/js/shiro-trie.svg
