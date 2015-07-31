@@ -230,9 +230,46 @@ describe('shiro-trie node module', function() {
       assert.equal(shiroTrie.new().add('newsletter:view,create,edit,delete').check('newsletter:view,create,any,edit,delete'), false);
     });
   });
-  
-  describe('', function() {
-    
+
+  describe('get Permissions', function() {
+    var trie;
+    before(function(done) {
+      trie = shiroTrie.new().add('d:1,2,3:read,write', 'd:4:read', 'x', 'a:1:b:3,4', 'a:2:b:5,6');
+      done();
+    });
+    it('simple id lookup', function(done) {
+      expect(trie.permissions('d:?')).to.eql(['1','2','3','4']);
+      done();
+    });
+    it('simple id lookup with explicit any', function(done) {
+      expect(trie.permissions('d:?:$')).to.eql(['1','2','3','4']);
+      done();
+    });
+    it('simple id lookup with specific sub-right', function(done) {
+      expect(trie.permissions('d:?:write')).to.eql(['1','2','3']);
+      done();
+    });
+    it('explicit lookup at end', function(done) {
+      expect(trie.permissions('d:2:?')).to.eql(['read','write']);
+      expect(trie.permissions('d:4:?')).to.eql(['read']);
+      done();
+    });
+    it('wildcard lookup at end', function(done) {
+      expect(trie.permissions('x:?')).to.eql(['*']);
+      done();
+    });
+    it('any flag in middle', function(done) {
+      expect(trie.permissions('a:$:b:?')).to.eql(['3','4','5','6']);
+      done();
+    });
+    it('multiple any flags', function(done) {
+      expect(trie.permissions('$:$:?')).to.eql(['read','write','b']);
+      done();
+    });
+    it('wildcard', function(done) {
+      expect(trie.permissions('x:$:b:?')).to.eql(['*']);
+      done();
+    });
   });
-  
+
 });
