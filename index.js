@@ -6,8 +6,9 @@ var ShiroTree = function() {
   this.data = {};
   return this;
 };
-ShiroTree.prototype.new = function() {
+ShiroTree.prototype.reset = function() {
   this.data = {};
+  return this;
 };
 
 ShiroTree.prototype.add = function() {
@@ -18,6 +19,7 @@ ShiroTree.prototype.add = function() {
       this.data = _add(this.data, args[arg].split(':'));
     }
   }
+  return this;
 };
 
 ShiroTree.prototype.check = function(string) {
@@ -35,7 +37,7 @@ module.exports = {
 };
 
 function _add(trie, array) {
-  var i, j, node, values, goRecursive;
+  var i, j, node, prevNode, values, goRecursive;
   node = trie;
   for (i = 0; i < array.length; i++) { // go through permission string array
     values = array[i].split(','); // split by comma
@@ -48,11 +50,12 @@ function _add(trie, array) {
         node[values[j]] = _add(node[values[j]], goRecursive); // call recursion for this subtree
         i = array.length; // break outer loop
       } else { // if we don't need recursion, we just go deeper
+        prevNode = node;
         node = node[values[j]];
       }
     }
   }
-  if (!goRecursive) { // if we did not went recursive, we close the tree with a * leaf
+  if (!goRecursive && (!prevNode || !prevNode.hasOwnProperty('*'))) { // if we did not went recursive, we close the tree with a * leaf
     node['*'] = {};
   }
   return trie;
@@ -62,15 +65,22 @@ function _check(trie, array) {
   var i, node, key;
   key = null;
   node = trie;
+  if (array.length < 1 || array[array.length-1] !== '*') {
+    array.push('*');
+  }
   for (i = 0; i < array.length; i++) {
     if (node.hasOwnProperty('*')) {
-      return true;
-    }
-    if (!node.hasOwnProperty(array[i])) {
+      if (Object.keys(node['*']).length === 0) {
+        return true;
+      }
+      node = node['*'];
+      key = '*';
+    } else if (!node.hasOwnProperty(array[i])) {
       return false;
+    } else {
+      node = node[array[i]];
+      key = array[i];
     }
-    node = node[array[i]];
-    key = array[i];
   }
   return true;
 }
