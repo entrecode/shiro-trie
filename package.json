@@ -20,8 +20,11 @@
     "authorization",
     "permissions"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^3.10.0"
+  },
   "devDependencies": {
+    "chai": "^3.2.0",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-jshint": "^0.11.0",
     "grunt-contrib-nodeunit": "^0.4.1",
