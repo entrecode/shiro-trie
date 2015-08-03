@@ -183,7 +183,7 @@ MIT © [entrecode GmbH](https://entrecode.de)
 
 [npm-image]: https://badge.fury.io/js/shiro-trie.svg
 [npm-url]: https://npmjs.org/package/shiro-trie
-[travis-image]: https://travis-ci.org/entrecode/shiro-trie.svg?branch=master
-[travis-url]: https://travis-ci.org/entrecode/shiro-trie
+[travis-image]: https://travis-ci.org/entrecode/node-shiro-trie.svg?branch=master
+[travis-url]: https://travis-ci.org/entrecode/node-shiro-trie
 [daviddm-image]: https://david-dm.org/entrecode/shiro-trie.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/entrecode/shiro-trie
