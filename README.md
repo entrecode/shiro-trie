@@ -177,6 +177,9 @@ $ istanbul cover _mocha -- -R spec
 
 ## Changelog
 
+### 0.1.1
+- Updated dependencies
+
 ### 0.1.0
 - Initial Release
 
@@ -191,5 +194,5 @@ MIT © [entrecode GmbH](https://entrecode.de)
 [travis-url]: https://travis-ci.org/entrecode/node-shiro-trie
 [coveralls-image]: https://coveralls.io/repos/entrecode/node-shiro-trie/badge.svg?branch=master&service=github
 [coveralls-url]: https://coveralls.io/github/entrecode/node-shiro-trie?branch=master
-[daviddm-image]: https://david-dm.org/entrecode/shiro-trie.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/entrecode/shiro-trie
+[daviddm-image]: https://david-dm.org/entrecode/node-shiro-trie.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/entrecode/node-shiro-trie
