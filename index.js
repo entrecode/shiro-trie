@@ -32,84 +32,119 @@ function _add(trie, array) {
 function _check(trie, array) {
   var i, node;
   node = trie;
-  if (array.length < 1 || array[array.length - 1] !== '*') {
+  if (array.length < 1 || array[array.length - 1] !== '*') { // add implicit star at the end
     array.push('*');
   }
   for (i = 0; i < array.length; i++) {
     if (node.hasOwnProperty('*')) {
-      if (Object.keys(node['*']).length === 0) {
+      if (Object.keys(node['*']).length === 0) { // if we find a star leaf in the trie, we are done (everything below is allowed)
         return true;
       }
-      node = node['*'];
+      node = node['*']; // otherwise we have to go deeper
     } else {
-      if (!node.hasOwnProperty(array[i])) {
+      if (!node.hasOwnProperty(array[i])) { // if the wanted permission is not found, we return false
         return false;
       }
-      node = node[array[i]];
+      node = node[array[i]]; // otherwise we go deeper
     }
   }
-  return true;
+  return true; // word (array) was found in the trie. all good!
 }
 
 function _permissions(trie, array) {
   var current, results;
   if (!trie || !array || !_.isObject(trie) || !_.isArray(array) || Object.keys(trie).length < 1 || array.length < 1) {
-    return [];
+    return []; // for recursion safety, we make sure we have really valid values
   }
-  if (trie.hasOwnProperty('*')) {
+  if (trie.hasOwnProperty('*')) { // if we have a star permission, we can just return that
     return ['*'];
   }
-  current = array.shift();
-  if (current === '?') {
+  current = array.shift(); // take first element from array
+  if (current === '?') { // the requested part
     results = Object.keys(trie);
-    if (array.length > 0 && array[0] !== '$') {
+    if (array.length > 0 && array[0] !== '$') { // if something is coming after the ?, we have to check permission and remove those that are not allowed
       results = results.filter(function(node) {
         return _check(trie[node], array);
       });
     }
     return results;
   }
-  if (current === '$') {
+  if (current === '$') { // if we have an 'any' flag, we have to go recursive for all alternatives
     results = [];
     Object.keys(trie).forEach(function(node) {
       results = results.concat(_permissions(trie[node], [].concat(array)));
     });
-    return _.pull(_.uniq(results), '*');
+    return _.pull(_.uniq(results), '*'); // remove duplicates and * from results
   }
   if (trie.hasOwnProperty(current)) {
-    return _permissions(trie[current], array);
+    return _permissions(trie[current], array); // we have to go deeper!
   }
   return [];
 }
 
+/**
+ * Retuns a new ShiroTrie instance
+ * @returns {ShiroTrie}
+ * @constructor
+ */
 var ShiroTrie = function() {
   this.data = {};
   return this;
 };
+
+/**
+ * removes all data from the Trie (clean startup)
+ * @returns {ShiroTrie}
+ */
 ShiroTrie.prototype.reset = function() {
   this.data = {};
   return this;
 };
 
+/**
+ * Add one or more permissions to the Trie
+ * @param {...string|...Array} strings - Any number of permission string(s) or String Array(s)
+ * @returns {ShiroTrie}
+ */
 ShiroTrie.prototype.add = function() {
   var args = _.flatten(arguments);
   var arg;
   for (arg in args) {
-    if (args.hasOwnProperty(arg) && typeof args[arg] === 'string') {
+    if (args.hasOwnProperty(arg) && _.isString(args[arg])) {
       this.data = _add(this.data, args[arg].split(':'));
     }
   }
   return this;
 };
 
+/**
+ * check if a specific permission is allowed in the current Trie.
+ * @param string The string to check. Should not contain , or * – always check for the most explicit permission
+ * @returns {*}
+ */
 ShiroTrie.prototype.check = function(string) {
+  if (!_.isString(string)) {
+    return false;
+  }
+  if (string.indexOf(',') !== -1) {
+    return false;
+  }
   return _check(this.data, string.split(':'));
 };
 
+/**
+ * return the Trie data
+ * @returns {{}|*}
+ */
 ShiroTrie.prototype.get = function() {
   return this.data;
 };
 
+/**
+ * check what permissions a certain Trie part contains
+ * @param string String to check – should contain exactly one ?. Also possible is usage of the any ($) parameter. See docs for details.
+ * @returns {*}
+ */
 ShiroTrie.prototype.permissions = function(string) {
   if (!_.isString(string)) {
     return [];

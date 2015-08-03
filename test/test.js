@@ -97,6 +97,7 @@ describe('shiro-trie node module', function() {
       trie.add('a:b:c:d');
       expect(trie.check('a:b:c:d')).to.eql(true);
       expect(trie.check('a:c:c:d')).to.eql(false);
+      expect(trie.check(1)).to.equal(false);
       done();
     });
     it('star permission', function(done) {
@@ -104,6 +105,11 @@ describe('shiro-trie node module', function() {
       expect(trie.check('a:b')).to.eql(true);
       expect(trie.check('a:b:c')).to.eql(true);
       expect(trie.check('b:c')).to.eql(false);
+      expect(trie.check('*')).to.eql(false);
+      expect(trie.check('b:*')).to.eql(false);
+      expect(trie.check('a:*')).to.eql(true);
+      expect(trie.check('a:b:*')).to.eql(true);
+      expect(trie.check('a:*:c')).to.eql(true);
       done();
     });
     it('implicit star permission', function(done) {
@@ -111,6 +117,11 @@ describe('shiro-trie node module', function() {
       expect(trie.check('a:b')).to.eql(true);
       expect(trie.check('a:b:c')).to.eql(true);
       expect(trie.check('b:c')).to.eql(false);
+      expect(trie.check('*')).to.eql(false);
+      expect(trie.check('b:*')).to.eql(false);
+      expect(trie.check('a:*')).to.eql(true);
+      expect(trie.check('a:b:*')).to.eql(true);
+      expect(trie.check('a:*:c')).to.eql(true);
       done();
     });
     it('comma permission', function(done) {
