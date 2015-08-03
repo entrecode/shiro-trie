@@ -270,6 +270,18 @@ describe('shiro-trie node module', function() {
       expect(trie.permissions('x:$:b:?')).to.eql(['*']);
       done();
     });
+    it('no string given', function(done) {
+      expect(trie.permissions()).to.eql([]);
+      done();
+    });
+    it('illegal string given', function(done) {
+      expect(trie.permissions(':')).to.eql([]);
+      done();
+    });
+    it('no tree', function(done) {
+      expect(shiroTrie.new().permissions('a:b')).to.eql([]);
+      done();
+    });
   });
 
 });
