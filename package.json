@@ -2,13 +2,13 @@
   "name": "shiro-trie",
   "version": "0.1.0",
   "description": "Check permissions using Shiro-like strings, put in a trie.",
-  "homepage": "https://entrecode.de",
+  "homepage": "https://github.com/entrecode/node-shiro-trie",
   "author": {
     "name": "Ruben Deyhle",
     "email": "deyhle@entrecode.de",
     "url": "https://entrecode.de"
   },
-  "repository": "entrecode/shiro-trie",
+  "repository": "https://github.com/entrecode/node-shiro-trie",
   "license": "MIT",
   "files": [
     "index.js"

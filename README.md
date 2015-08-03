@@ -1,4 +1,4 @@
-#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage][coveralls-image]][coveralls-url] [![Dependency Status][daviddm-image]][daviddm-url]
 
 > Check permissions using Shiro-like strings, put in a trie.
 
@@ -160,7 +160,11 @@ Tests can be executed with [Mocha](http://mochajs.org/):
 $ mocha -R spec
 ```
 
-Test Coverage is 100% and can be checked with [istanbul](http://gotwarlost.github.io/istanbul/):
+Current Test Coverage: 
+
+[![Coverage][coveralls-image]][coveralls-url] 
+
+It can be checked with [istanbul](http://gotwarlost.github.io/istanbul/):
 
 ```sh
 $ istanbul cover _mocha -- -R spec
@@ -185,5 +189,7 @@ MIT © [entrecode GmbH](https://entrecode.de)
 [npm-url]: https://npmjs.org/package/shiro-trie
 [travis-image]: https://travis-ci.org/entrecode/node-shiro-trie.svg?branch=master
 [travis-url]: https://travis-ci.org/entrecode/node-shiro-trie
+[coveralls-image]: https://coveralls.io/repos/entrecode/node-shiro-trie/badge.svg?branch=master&service=github
+[coveralls-url]: https://coveralls.io/github/entrecode/node-shiro-trie?branch=master
 [daviddm-image]: https://david-dm.org/entrecode/shiro-trie.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/entrecode/shiro-trie
