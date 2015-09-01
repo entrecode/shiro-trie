@@ -1,0 +1,32 @@
+{
+  "name": "shiro-trie",
+  "main": "dist/shiro-trie.js",
+  "version": "0.2.0",
+  "homepage": "https://github.com/entrecode/shiro-trie",
+  "authors": [
+    "Ruben Deyhle <deyhle@entrecode.de>",
+    "Konstantin Ehlers <ehlers@entrecode.de>"
+  ],
+  "description": "Check permissions using Shiro-like strings, put in a trie.",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "shiro-trie",
+    "shiro",
+    "trie",
+    "authorization",
+    "permissions"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lodash": "~3.10.1"
+  }
+}
