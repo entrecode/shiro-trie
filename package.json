@@ -1,6 +1,6 @@
 {
   "name": "shiro-trie",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Check permissions using Shiro-like strings, put in a trie.",
   "homepage": "https://github.com/entrecode/shiro-trie",
   "author": {
@@ -28,7 +28,7 @@
     "chai": "^3.2.0",
     "coveralls": "^2.11.3",
     "istanbul": "^0.3.17",
-    "mocha": "^2.2.5",
+    "mocha": "^2.3.1",
     "mocha-lcov-reporter": "0.0.2"
   },
   "scripts": {

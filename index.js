@@ -82,6 +82,26 @@ function _permissions(trie, array) {
   return [];
 }
 
+function _expand(permission) {
+  var results = [];
+  var parts = permission.split(':');
+  var i, alternatives;
+  for (i = 0; i < parts.length; i++) {
+    alternatives = parts[i].split(',');
+    if (results.length === 0) {
+      results = alternatives;
+    } else {
+      alternatives = _.map(alternatives, function(alternative) {
+        return _.map(results, function(perm) {
+          return perm + ':' + alternative;
+        }, this);
+      }, this);
+      results = _.flatten(_.union(alternatives));
+    }
+  }
+  return results;
+}
+
 /**
  * Retuns a new ShiroTrie instance
  * @returns {ShiroTrie}
@@ -119,15 +139,17 @@ ShiroTrie.prototype.add = function() {
 
 /**
  * check if a specific permission is allowed in the current Trie.
- * @param string The string to check. Should not contain , or * – always check for the most explicit permission
+ * @param string The string to check. Should not contain * – always check for the most explicit permission
  * @returns {*}
  */
 ShiroTrie.prototype.check = function(string) {
   if (!_.isString(string)) {
     return false;
   }
-  if (string.indexOf(',') !== -1) {
-    return false;
+  if (string.indexOf(',') !== -1) { // expand string to single comma-less permissions...
+    return _.every(_.map(_expand(string), function(permission) {
+      return _check(this.data, permission.split(':'));
+    }, this), Boolean); // ... and make sure they are all allowed
   }
   return _check(this.data, string.split(':'));
 };
@@ -142,7 +164,8 @@ ShiroTrie.prototype.get = function() {
 
 /**
  * check what permissions a certain Trie part contains
- * @param string String to check – should contain exactly one ?. Also possible is usage of the any ($) parameter. See docs for details.
+ * @param string String to check – should contain exactly one ?. Also possible is usage of the any ($) parameter. See
+ *   docs for details.
  * @returns {*}
  */
 ShiroTrie.prototype.permissions = function(string) {
@@ -155,5 +178,6 @@ ShiroTrie.prototype.permissions = function(string) {
 module.exports = {
   new: function() {
     return new ShiroTrie();
-  }
+  },
+  _expand: _expand
 };
