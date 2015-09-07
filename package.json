@@ -1,14 +1,14 @@
 {
   "name": "shiro-trie",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "Check permissions using Shiro-like strings, put in a trie.",
-  "homepage": "https://github.com/entrecode/node-shiro-trie",
+  "homepage": "https://github.com/entrecode/shiro-trie",
   "author": {
     "name": "Ruben Deyhle",
     "email": "deyhle@entrecode.de",
     "url": "https://entrecode.de"
   },
-  "repository": "https://github.com/entrecode/node-shiro-trie",
+  "repository": "https://github.com/entrecode/shiro-trie",
   "license": "MIT",
   "files": [
     "index.js"
@@ -24,6 +24,7 @@
     "lodash": "^3.10.0"
   },
   "devDependencies": {
+    "browserify": "^11.0.1",
     "chai": "^3.2.0",
     "coveralls": "^2.11.3",
     "istanbul": "^0.3.17",
@@ -32,6 +33,7 @@
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha ./test/*",
-    "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*"
+    "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*",
+    "build": "browserify -x _ -r ./index.js -s shiroTrie -o ./dist/shiro-trie.js"
   }
 }

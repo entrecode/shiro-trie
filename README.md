@@ -8,8 +8,32 @@ For example, if you have permissions to access resources with id 1 and 2, you ca
 
 ## Install
 
+### node.js
+
 ```sh
 $ npm install --save shiro-trie
+```
+
+### web / frontend
+
+```sh
+$ bower install --save shiro-trie
+```
+
+## Getting Started
+
+### node.js
+
+```js
+var shiroTrie = require('shiro-trie');
+```
+
+### web / frontend
+Using the shiro-trie plugin in your web-app is pretty simple, too. First, you should include the script file to your HTML-file:
+
+```html
+<script type="text/javascript" src="bower_components/lodash/lodash.js" /> <!-- shiro-trie is dependant on lodash! -->
+<script type="text/javascript" src="bower_components/shiro-trie/dist/shiro-trie.js" />
 ```
 
 ## Usage
@@ -30,8 +54,8 @@ account1.check('nas:timeCapsule:write'); // false
 
 account1.permissions('printer:?'); // ['xpc5000', 'xpc4000']
 account1.permissions('nas:$:?'); // ['read']
-
 ```
+
 
 ## Defining permissions
 
@@ -177,6 +201,10 @@ $ istanbul cover _mocha -- -R spec
 
 ## Changelog
 
+### 0.2.0
+- Renamed package to shiro-trie
+- Added bower support
+
 ### 0.1.1
 - Updated dependencies
 
@@ -190,9 +218,9 @@ MIT © [entrecode GmbH](https://entrecode.de)
 
 [npm-image]: https://badge.fury.io/js/shiro-trie.svg
 [npm-url]: https://npmjs.org/package/shiro-trie
-[travis-image]: https://travis-ci.org/entrecode/node-shiro-trie.svg?branch=master
-[travis-url]: https://travis-ci.org/entrecode/node-shiro-trie
-[coveralls-image]: https://coveralls.io/repos/entrecode/node-shiro-trie/badge.svg?branch=master&service=github
-[coveralls-url]: https://coveralls.io/github/entrecode/node-shiro-trie?branch=master
-[daviddm-image]: https://david-dm.org/entrecode/node-shiro-trie.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/entrecode/node-shiro-trie
+[travis-image]: https://travis-ci.org/entrecode/shiro-trie.svg?branch=master
+[travis-url]: https://travis-ci.org/entrecode/shiro-trie
+[coveralls-image]: https://coveralls.io/repos/entrecode/shiro-trie/badge.svg?branch=master&service=github
+[coveralls-url]: https://coveralls.io/github/entrecode/shiro-trie?branch=master
+[daviddm-image]: https://david-dm.org/entrecode/shiro-trie.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/entrecode/shiro-trie
