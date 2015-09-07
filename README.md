@@ -94,7 +94,6 @@ or
 `nas:timeCapsule:write`
 
 The function for checking a permission is `.check(string)`. It returns `true` or `false`.
-Checking for a string containing `,` will always return `false` – you have to check for specific permissions.
 
 ## Getting available permissions
 
@@ -153,7 +152,8 @@ account1.add([
 
 #### check(string)
 
-Checks if a single permission is allowed. No special characters apart from `:` and `*` are allowed.
+Checks if a single permission is allowed. No special characters apart from `:`, `,` and `*` are allowed.
+If the permission string contains `,` characters, all variants are tested and the result is only true if all permissions are allowed.
 Returns *Boolean.*
 
 ```js
@@ -196,10 +196,15 @@ $ istanbul cover _mocha -- -R spec
 
 ## Known issues
 
-- `,` is not supported in `check(…)`
 - `add(…)` and `permissions(…)` is implemented recursive which is probably not ideal
 
 ## Changelog
+
+### 0.3.0
+- support for `,` in `check(…)`
+
+### 0.2.1
+- bug fixes
 
 ### 0.2.0
 - Renamed package to shiro-trie

@@ -240,6 +240,21 @@ describe('shiro-trie node module', function() {
     it('test20', function() {
       assert.equal(shiroTrie.new().add('newsletter:view,create,edit,delete').check('newsletter:view,create,any,edit,delete'), false);
     });
+    it('test21', function() {
+      assert.equal(shiroTrie.new().add('acc:perm:*').check('acc:perm:x:y:z,1,2'), true);
+    });
+    it('test22', function() {
+      assert.equal(shiroTrie.new().add('acc:perm:x:y:z').check('acc:perm:x:y:z,1,2'), false);
+    });
+    it('test23', function() {
+      assert.equal(shiroTrie.new().add('acc:perm').check('acc:perm:x,a:y:z,1,2'), true);
+    });
+    it('test24', function() {
+      assert.equal(shiroTrie.new().add('acc:perm').check('acc:perm:x,a:*:z,1,2'), true);
+    });
+    it('test25', function() {
+      assert.equal(shiroTrie.new().add('acc:perm:x:y:z').check('acc:perm:x:*:z'), false);
+    });
   });
 
   describe('get Permissions', function() {
@@ -294,5 +309,29 @@ describe('shiro-trie node module', function() {
       done();
     });
   });
-
+  
+  describe('expand function', function() {
+    it('test1', function() {
+      expect(shiroTrie._expand('x:a,b')).to.eql(['x:a','x:b']);
+    });
+    it('test2', function() {
+      expect(shiroTrie._expand('x,y:a,b')).to.eql(['x:a', 'y:a', 'x:b', 'y:b']);
+    });
+    it('test3', function() {
+      expect(shiroTrie._expand('x:a,b,c')).to.eql(['x:a','x:b', 'x:c']);
+    });
+    it('test4', function() {
+      expect(shiroTrie._expand('x:a,b,c:d')).to.eql(['x:a:d','x:b:d', 'x:c:d']);
+    });
+    it('test5', function() {
+      expect(shiroTrie._expand('x,y:a,b,c:1,2')).to.eql(['x:a:1','y:a:1','x:b:1','y:b:1','x:c:1' , 'y:c:1','x:a:2', 'y:a:2', 'x:b:2', 'y:b:2',  'x:c:2',  'y:c:2']);
+    });
+    it('test6', function() {
+      expect(shiroTrie._expand('x,y:a')).to.eql(['x:a','y:a']);
+    });
+    it('test7', function() {
+      expect(shiroTrie._expand('x:y')).to.eql(['x:y']);
+    });
+  });
+  
 });
