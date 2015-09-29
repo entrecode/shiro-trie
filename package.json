@@ -29,6 +29,7 @@
     "coveralls": "^2.11.3",
     "istanbul": "^0.3.17",
     "mocha": "^2.3.1",
+    "mocha-bamboo-reporter": "^1.1.0",
     "mocha-lcov-reporter": "0.0.2"
   },
   "scripts": {
