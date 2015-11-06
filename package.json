@@ -29,7 +29,7 @@
     "coveralls": "2.11.4",
     "istanbul": "0.3.21",
     "mocha": "2.3.3",
-    "mocha-lcov-reporter": "0.0.2"
+    "mocha-lcov-reporter": "1.0.0"
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha ./test/*",
