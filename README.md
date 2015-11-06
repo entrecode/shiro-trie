@@ -200,6 +200,9 @@ $ istanbul cover _mocha -- -R spec
 
 ## Changelog
 
+### 0.3.1
+- dependency update
+
 ### 0.3.0
 - support for `,` in `check(…)`
 
