@@ -28,7 +28,7 @@
     "chai": "3.4.1",
     "coveralls": "2.11.4",
     "istanbul": "0.4.1",
-    "mocha": "2.3.3",
+    "mocha": "2.3.4",
     "mocha-bamboo-reporter": "^1.1.0",
     "mocha-lcov-reporter": "1.0.0"
   },
