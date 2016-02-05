@@ -147,9 +147,9 @@ ShiroTrie.prototype.check = function(string) {
     return false;
   }
   if (string.indexOf(',') !== -1) { // expand string to single comma-less permissions...
-    return _.every(_.map(_expand(string), function(permission) {
+    return _.every(_.map(_expand(string), _.bind(function(permission) {
       return _check(this.data, permission.split(':'));
-    }, this), Boolean); // ... and make sure they are all allowed
+    }, this)), Boolean); // ... and make sure they are all allowed
   }
   return _check(this.data, string.split(':'));
 };
