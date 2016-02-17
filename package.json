@@ -21,7 +21,6 @@
     "permissions"
   ],
   "dependencies": {
-    "lodash": "4.3.0"
   },
   "devDependencies": {
     "browserify": "13.0.0",

@@ -1,29 +1,48 @@
 'use strict';
 
-var _ = require('lodash');
+Array.prototype.uniq = function() {
+  var u = {}, a = [];
+  for (var i = 0, l = this.length; i < l; ++i) {
+    if (Object.prototype.hasOwnProperty.call(u, this[i])) {
+      continue;
+    }
+    a.push(this[i]);
+    u[this[i]] = 1;
+  }
+  return a;
+};
 
 function _add(trie, array) {
   var i, j, node, prevNode, values, goRecursive;
   node = trie;
   goRecursive = false;
-  for (i = 0; i < array.length; i++) { // go through permission string array
-    values = array[i].split(','); // split by comma
-    for (j = 0; j < values.length; j++) { // default: only once (no comma separation)
-      if (!node.hasOwnProperty(values[j])) { // permission is new -> create
+  // go through permission string array
+  for (i = 0; i < array.length; i++) {
+    // split by comma
+    values = array[i].split(',');
+    // default: only once (no comma separation)
+    for (j = 0; j < values.length; j++) {
+      // permission is new -> create
+      if (!node.hasOwnProperty(values[j])) {
         node[values[j]] = {};
       }
-      if (values.length > 1) { // if we have a comma separated permission list, we have to go recursive
-        goRecursive = goRecursive || array.slice(i + 1); // save the remaining permission array (subTrie has to be
-                                                         // appended to each one)
-        node[values[j]] = _add(node[values[j]], goRecursive); // call recursion for this subTrie
-        i = array.length; // break outer loop
-      } else { // if we don't need recursion, we just go deeper
+      if (values.length > 1) {
+        // if we have a comma separated permission list, we have to go recursive
+        // save the remaining permission array (subTrie has to be appended to each one)
+        goRecursive = goRecursive || array.slice(i + 1);
+        // call recursion for this subTrie
+        node[values[j]] = _add(node[values[j]], goRecursive);
+        // break outer loop
+        i = array.length;
+      } else {
+        // if we don't need recursion, we just go deeper
         prevNode = node;
         node = node[values[j]];
       }
     }
   }
-  if (!goRecursive && (!prevNode || !prevNode.hasOwnProperty('*'))) { // if we did not went recursive, we close the Trie with a * leaf
+  // if we did not went recursive, we close the Trie with a * leaf
+  if (!goRecursive && (!prevNode || !prevNode.hasOwnProperty('*'))) {
     node['*'] = {};
   }
   return trie;
@@ -32,52 +51,76 @@ function _add(trie, array) {
 function _check(trie, array) {
   var i, node;
   node = trie;
-  if (array.length < 1 || array[array.length - 1] !== '*') { // add implicit star at the end
+  // add implicit star at the end
+  if (array.length < 1 || array[array.length - 1] !== '*') {
     array.push('*');
   }
   for (i = 0; i < array.length; i++) {
     if (node.hasOwnProperty('*')) {
-      if (Object.keys(node['*']).length === 0) { // if we find a star leaf in the trie, we are done (everything below is allowed)
+      // if we find a star leaf in the trie, we are done (everything below is allowed)
+      if (Object.keys(node['*']).length === 0) {
         return true;
       }
-      node = node['*']; // otherwise we have to go deeper
+      // otherwise we have to go deeper
+      node = node['*'];
     } else {
-      if (!node.hasOwnProperty(array[i])) { // if the wanted permission is not found, we return false
+      // if the wanted permission is not found, we return false
+      if (!node.hasOwnProperty(array[i])) {
         return false;
       }
-      node = node[array[i]]; // otherwise we go deeper
+      // otherwise we go deeper
+      node = node[array[i]];
     }
   }
-  return true; // word (array) was found in the trie. all good!
+  // word (array) was found in the trie. all good!
+  return true;
 }
 
 function _permissions(trie, array) {
   var current, results;
-  if (!trie || !array || !_.isObject(trie) || !_.isArray(array) || Object.keys(trie).length < 1 || array.length < 1) {
-    return []; // for recursion safety, we make sure we have really valid values
+  if (!trie || !array ||
+    typeof(trie) !== 'object' || !Array.isArray(array) ||
+    Object.keys(trie).length < 1 || array.length < 1) {
+    // for recursion safety, we make sure we have really valid values
+    return [];
   }
-  if (trie.hasOwnProperty('*')) { // if we have a star permission, we can just return that
+  // if we have a star permission, we can just return that
+  if (trie.hasOwnProperty('*')) {
     return ['*'];
   }
-  current = array.shift(); // take first element from array
-  if (current === '?') { // the requested part
+  // take first element from array
+  current = array.shift();
+  // the requested part
+  if (current === '?') {
     results = Object.keys(trie);
-    if (array.length > 0 && array[0] !== '$') { // if something is coming after the ?, we have to check permission and remove those that are not allowed
+    // if something is coming after the ?,
+    // we have to check permission and remove those that are not allowed
+    if (array.length > 0 && array[0] !== '$') {
       results = results.filter(function(node) {
         return _check(trie[node], array);
       });
     }
     return results;
   }
-  if (current === '$') { // if we have an 'any' flag, we have to go recursive for all alternatives
+  // if we have an 'any' flag, we have to go recursive for all alternatives
+  if (current === '$') {
     results = [];
-    Object.keys(trie).forEach(function(node) {
+    Object.keys(trie).forEach(function concatPermissions(node) {
       results = results.concat(_permissions(trie[node], [].concat(array)));
     });
-    return _.pull(_.uniq(results), '*'); // remove duplicates and * from results
+    // remove duplicates
+    var uniq = results.uniq();
+    // … and * from results
+    for (var i = uniq.length - 1; i >= 0; i--) {
+      if (uniq[i] === '*') {
+        uniq.splice(i, 1);
+      }
+    }
+    return uniq;
   }
   if (trie.hasOwnProperty(current)) {
-    return _permissions(trie[current], array); // we have to go deeper!
+    // we have to go deeper!
+    return _permissions(trie[current], array);
   }
   return [];
 }
@@ -91,12 +134,12 @@ function _expand(permission) {
     if (results.length === 0) {
       results = alternatives;
     } else {
-      alternatives = _.map(alternatives, function(alternative) {
-        return _.map(results, function(perm) {
+      alternatives = alternatives.map(function(alternative) {
+        return results.map(function(perm) {
           return perm + ':' + alternative;
         }, this);
       }, this);
-      results = _.flatten(_.union(alternatives));
+      results = [].concat.apply([], alternatives.uniq());
     }
   }
   return results;
@@ -123,14 +166,14 @@ ShiroTrie.prototype.reset = function() {
 
 /**
  * Add one or more permissions to the Trie
- * @param {...string|...Array} strings - Any number of permission string(s) or String Array(s)
+ * @param {...string|...Array} args - Any number of permission string(s) or String Array(s)
  * @returns {ShiroTrie}
  */
 ShiroTrie.prototype.add = function() {
-  var args = _.flatten(arguments);
+  var args = [].concat.apply([], arguments);
   var arg;
   for (arg in args) {
-    if (args.hasOwnProperty(arg) && _.isString(args[arg])) {
+    if (args.hasOwnProperty(arg) && typeof(args[arg]) === 'string') {
       this.data = _add(this.data, args[arg].split(':'));
     }
   }
@@ -143,13 +186,13 @@ ShiroTrie.prototype.add = function() {
  * @returns {*}
  */
 ShiroTrie.prototype.check = function(string) {
-  if (!_.isString(string)) {
+  if (typeof(string) !== 'string') {
     return false;
   }
   if (string.indexOf(',') !== -1) { // expand string to single comma-less permissions...
-    return _.every(_.map(_expand(string), _.bind(function(permission) {
+    return _expand(string).map(function(permission) {
       return _check(this.data, permission.split(':'));
-    }, this)), Boolean); // ... and make sure they are all allowed
+    }, this).every(Boolean); // ... and make sure they are all allowed
   }
   return _check(this.data, string.split(':'));
 };
@@ -169,7 +212,7 @@ ShiroTrie.prototype.get = function() {
  * @returns {*}
  */
 ShiroTrie.prototype.permissions = function(string) {
-  if (!_.isString(string)) {
+  if (typeof(string) !== 'string') {
     return [];
   }
   return _permissions(this.data, string.split(':'));
@@ -179,5 +222,5 @@ module.exports = {
   new: function() {
     return new ShiroTrie();
   },
-  _expand: _expand
+  _expand: _expand,
 };
