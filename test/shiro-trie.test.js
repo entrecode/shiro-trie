@@ -1,8 +1,12 @@
 'use strict';
-var chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
-var shiroTrie = require('../');
+
+var isNode = typeof process !== 'undefined';
+if (isNode) {
+  var chai = require('chai');
+  var expect = chai.expect;
+  var assert = chai.assert;
+  var shiroTrie = require('../');
+}
 
 var trie;
 
@@ -24,23 +28,23 @@ describe('shiro-trie node module', function() {
     });
     it('single permission', function(done) {
       trie.add('a:b:c:d');
-      expect(trie.get()).to.eql({a: {b: {c: {d: {'*': {}}}}}});
+      expect(trie.get()).to.eql({ a: { b: { c: { d: { '*': {} } } } } });
       done();
     });
     it('two single permissions', function(done) {
       trie.add('a:b:c:d');
       trie.add('a:c:c:d');
-      expect(trie.get()).to.eql({a: {b: {c: {d: {'*': {}}}}, c: {c: {d: {'*': {}}}}}});
+      expect(trie.get()).to.eql({ a: { b: { c: { d: { '*': {} } } }, c: { c: { d: { '*': {} } } } } });
       done();
     });
     it('two permissions as args', function(done) {
       trie.add('a:b:c:d', 'a:c:c:d');
-      expect(trie.get()).to.eql({a: {b: {c: {d: {'*': {}}}}, c: {c: {d: {'*': {}}}}}});
+      expect(trie.get()).to.eql({ a: { b: { c: { d: { '*': {} } } }, c: { c: { d: { '*': {} } } } } });
       done();
     });
     it('two permissions as array', function(done) {
       trie.add(['a:b:c:d', 'a:c:c:d']);
-      expect(trie.get()).to.eql({a: {b: {c: {d: {'*': {}}}}, c: {c: {d: {'*': {}}}}}});
+      expect(trie.get()).to.eql({ a: { b: { c: { d: { '*': {} } } }, c: { c: { d: { '*': {} } } } } });
       done();
     });
     it('non-strings get ignored', function(done) {
@@ -53,8 +57,8 @@ describe('shiro-trie node module', function() {
       trie.add('a:b,c:d');
       expect(trie.get()).to.eql({
         a: {
-          b: {d: {'*': {}}},
-          c: {d: {'*': {}}}
+          b: { d: { '*': {} } },
+          c: { d: { '*': {} } }
         }
       });
       done();
@@ -64,19 +68,19 @@ describe('shiro-trie node module', function() {
       expect(trie.get()).to.eql({
         a: {
           b: {
-            e: {'*': {}},
-            f: {'*': {}},
-            g: {'*': {}}
+            e: { '*': {} },
+            f: { '*': {} },
+            g: { '*': {} }
           },
           c: {
-            e: {'*': {}},
-            f: {'*': {}},
-            g: {'*': {}}
+            e: { '*': {} },
+            f: { '*': {} },
+            g: { '*': {} }
           },
           d: {
-            e: {'*': {}},
-            f: {'*': {}},
-            g: {'*': {}}
+            e: { '*': {} },
+            f: { '*': {} },
+            g: { '*': {} }
           }
         }
       });
@@ -264,19 +268,19 @@ describe('shiro-trie node module', function() {
       done();
     });
     it('simple id lookup', function(done) {
-      expect(trie.permissions('d:?')).to.eql(['1','2','3','4']);
+      expect(trie.permissions('d:?')).to.eql(['1', '2', '3', '4']);
       done();
     });
     it('simple id lookup with explicit any', function(done) {
-      expect(trie.permissions('d:?:$')).to.eql(['1','2','3','4']);
+      expect(trie.permissions('d:?:$')).to.eql(['1', '2', '3', '4']);
       done();
     });
     it('simple id lookup with specific sub-right', function(done) {
-      expect(trie.permissions('d:?:write')).to.eql(['1','2','3']);
+      expect(trie.permissions('d:?:write')).to.eql(['1', '2', '3']);
       done();
     });
     it('explicit lookup at end', function(done) {
-      expect(trie.permissions('d:2:?')).to.eql(['read','write']);
+      expect(trie.permissions('d:2:?')).to.eql(['read', 'write']);
       expect(trie.permissions('d:4:?')).to.eql(['read']);
       done();
     });
@@ -285,11 +289,11 @@ describe('shiro-trie node module', function() {
       done();
     });
     it('any flag in middle', function(done) {
-      expect(trie.permissions('a:$:b:?')).to.eql(['3','4','5','6']);
+      expect(trie.permissions('a:$:b:?')).to.eql(['3', '4', '5', '6']);
       done();
     });
     it('multiple any flags', function(done) {
-      expect(trie.permissions('$:$:?')).to.eql(['read','write','b']);
+      expect(trie.permissions('$:$:?')).to.eql(['read', 'write', 'b']);
       done();
     });
     it('wildcard', function(done) {
@@ -312,22 +316,22 @@ describe('shiro-trie node module', function() {
   
   describe('expand function', function() {
     it('test1', function() {
-      expect(shiroTrie._expand('x:a,b')).to.eql(['x:a','x:b']);
+      expect(shiroTrie._expand('x:a,b')).to.eql(['x:a', 'x:b']);
     });
     it('test2', function() {
       expect(shiroTrie._expand('x,y:a,b')).to.eql(['x:a', 'y:a', 'x:b', 'y:b']);
     });
     it('test3', function() {
-      expect(shiroTrie._expand('x:a,b,c')).to.eql(['x:a','x:b', 'x:c']);
+      expect(shiroTrie._expand('x:a,b,c')).to.eql(['x:a', 'x:b', 'x:c']);
     });
     it('test4', function() {
-      expect(shiroTrie._expand('x:a,b,c:d')).to.eql(['x:a:d','x:b:d', 'x:c:d']);
+      expect(shiroTrie._expand('x:a,b,c:d')).to.eql(['x:a:d', 'x:b:d', 'x:c:d']);
     });
     it('test5', function() {
-      expect(shiroTrie._expand('x,y:a,b,c:1,2')).to.eql(['x:a:1','y:a:1','x:b:1','y:b:1','x:c:1' , 'y:c:1','x:a:2', 'y:a:2', 'x:b:2', 'y:b:2',  'x:c:2',  'y:c:2']);
+      expect(shiroTrie._expand('x,y:a,b,c:1,2')).to.eql(['x:a:1', 'y:a:1', 'x:b:1', 'y:b:1', 'x:c:1', 'y:c:1', 'x:a:2', 'y:a:2', 'x:b:2', 'y:b:2', 'x:c:2', 'y:c:2']);
     });
     it('test6', function() {
-      expect(shiroTrie._expand('x,y:a')).to.eql(['x:a','y:a']);
+      expect(shiroTrie._expand('x,y:a')).to.eql(['x:a', 'y:a']);
     });
     it('test7', function() {
       expect(shiroTrie._expand('x:y')).to.eql(['x:y']);
