@@ -1,13 +1,13 @@
 'use strict';
 
-Array.prototype.uniq = function() {
+function uniq(arr) {
   var u = {}, a = [];
-  for (var i = 0, l = this.length; i < l; ++i) {
-    if (Object.prototype.hasOwnProperty.call(u, this[i])) {
+  for (var i = 0, l = arr.length; i < l; ++i) {
+    if (Object.prototype.hasOwnProperty.call(u, arr[i])) {
       continue;
     }
-    a.push(this[i]);
-    u[this[i]] = 1;
+    a.push(arr[i]);
+    u[arr[i]] = 1;
   }
   return a;
 };
@@ -109,14 +109,14 @@ function _permissions(trie, array) {
       results = results.concat(_permissions(trie[node], [].concat(array)));
     });
     // remove duplicates
-    var uniq = results.uniq();
+    var u = uniq(results);
     // … and * from results
-    for (var i = uniq.length - 1; i >= 0; i--) {
-      if (uniq[i] === '*') {
-        uniq.splice(i, 1);
+    for (var i = u.length - 1; i >= 0; i--) {
+      if (u[i] === '*') {
+        u.splice(i, 1);
       }
     }
-    return uniq;
+    return u;
   }
   if (trie.hasOwnProperty(current)) {
     // we have to go deeper!
@@ -139,7 +139,7 @@ function _expand(permission) {
           return perm + ':' + alternative;
         }, this);
       }, this);
-      results = [].concat.apply([], alternatives.uniq());
+      results = [].concat.apply([], uniq(alternatives));
     }
   }
   return results;
