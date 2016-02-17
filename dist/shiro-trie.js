@@ -1,14 +1,14 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.shiroTrie = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/index.js":[function(require,module,exports){
 'use strict';
 
-Array.prototype.uniq = function() {
+function uniq(arr) {
   var u = {}, a = [];
-  for (var i = 0, l = this.length; i < l; ++i) {
-    if (Object.prototype.hasOwnProperty.call(u, this[i])) {
+  for (var i = 0, l = arr.length; i < l; ++i) {
+    if (Object.prototype.hasOwnProperty.call(u, arr[i])) {
       continue;
     }
-    a.push(this[i]);
-    u[this[i]] = 1;
+    a.push(arr[i]);
+    u[arr[i]] = 1;
   }
   return a;
 };
@@ -110,14 +110,14 @@ function _permissions(trie, array) {
       results = results.concat(_permissions(trie[node], [].concat(array)));
     });
     // remove duplicates
-    var uniq = results.uniq();
+    var u = uniq(results);
     // … and * from results
-    for (var i = uniq.length - 1; i >= 0; i--) {
-      if (uniq[i] === '*') {
-        uniq.splice(i, 1);
+    for (var i = u.length - 1; i >= 0; i--) {
+      if (u[i] === '*') {
+        u.splice(i, 1);
       }
     }
-    return uniq;
+    return u;
   }
   if (trie.hasOwnProperty(current)) {
     // we have to go deeper!
@@ -140,7 +140,7 @@ function _expand(permission) {
           return perm + ':' + alternative;
         }, this);
       }, this);
-      results = [].concat.apply([], alternatives.uniq());
+      results = [].concat.apply([], uniq(alternatives));
     }
   }
   return results;
