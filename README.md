@@ -199,6 +199,8 @@ $ istanbul cover _mocha -- -R spec
 - `add(…)` and `permissions(…)` is implemented recursive which is probably not ideal
 
 ## Changelog
+### 0.3.5
+- removed dependency lodash. shiro-trie is super slim now.
 
 ### 0.3.4
 - dependency update
