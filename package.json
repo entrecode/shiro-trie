@@ -20,8 +20,7 @@
     "authorization",
     "permissions"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "browserify": "13.0.0",
     "chai": "3.5.0",
@@ -29,7 +28,7 @@
     "istanbul": "0.4.2",
     "mocha": "2.4.5",
     "mocha-bamboo-reporter": "^1.1.0",
-    "mocha-lcov-reporter": "1.0.0",
+    "mocha-lcov-reporter": "1.1.0",
     "karma": "0.13.21",
     "karma-bamboo-reporter": "0.1.2",
     "karma-chai-plugins": "0.6.1",
