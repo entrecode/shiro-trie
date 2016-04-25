@@ -199,8 +199,13 @@ $ istanbul cover _mocha -- -R spec
 - `add(…)` and `permissions(…)` is implemented recursive which is probably not ideal
 
 ## Changelog
+
+### 0.3.7
+- dependency update
+
 ### 0.3.6
 - do not put uniq into Array.prototype
+
 ### 0.3.5
 - removed dependency lodash. shiro-trie is super slim now.
 
