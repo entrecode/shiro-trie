@@ -115,7 +115,7 @@ The permission `nas:timeCapsule,fritzbox:read` can be queried with `nas:?` which
 Available permissions: `nas:timeCapsule:read,write`, `nas:fritzbox:read,reboot`.
 The query `nas:$:?` would return `['read', 'write', 'reboot']`.
 
-The function for checking available permissions is `.permissions(string)`. It returns `true` or `false`.
+The function for checking available permissions is `.permissions(string)`. It returns an Array of available permission Strings.
 The string to check may only contain one `?` character.
 
 ## API
@@ -199,8 +199,13 @@ $ istanbul cover _mocha -- -R spec
 - `add(…)` and `permissions(…)` is implemented recursive which is probably not ideal
 
 ## Changelog
+
+### 0.3.7
+- dependency update
+
 ### 0.3.6
 - do not put uniq into Array.prototype
+
 ### 0.3.5
 - removed dependency lodash. shiro-trie is super slim now.
 
