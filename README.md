@@ -200,6 +200,9 @@ $ istanbul cover _mocha -- -R spec
 
 ## Changelog
 
+### 0.3.8
+- dependency update
+
 ### 0.3.7
 - dependency update
 

@@ -1,6 +1,6 @@
 {
   "name": "shiro-trie",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "Check permissions using Shiro-like strings, put in a trie.",
   "homepage": "https://github.com/entrecode/shiro-trie",
   "author": {
@@ -25,14 +25,14 @@
     "browserify": "13.1.0",
     "chai": "3.5.0",
     "coveralls": "2.11.12",
-    "istanbul": "0.4.4",
+    "istanbul": "0.4.5",
     "mocha": "3.0.2",
     "mocha-bamboo-reporter": "^1.1.1",
     "mocha-lcov-reporter": "1.2.0",
     "karma": "1.2.0",
     "karma-bamboo-reporter": "0.1.2",
     "karma-chai-plugins": "0.7.0",
-    "karma-chrome-launcher": "1.0.1",
+    "karma-chrome-launcher": "2.0.0",
     "karma-mocha": "1.1.1",
     "karma-phantomjs-launcher": "1.0.1",
     "phantomjs-prebuilt": "^2.1.12"
