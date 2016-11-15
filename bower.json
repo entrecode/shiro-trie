@@ -1,7 +1,7 @@
 {
   "name": "shiro-trie",
   "main": "dist/shiro-trie.js",
-  "version": "0.3.6",
+  "version": "0.3.9",
   "homepage": "https://github.com/entrecode/shiro-trie",
   "authors": [
     "Ruben Deyhle <deyhle@entrecode.de>",
