@@ -279,6 +279,14 @@ describe('shiro-trie node module', function() {
       expect(trie.permissions('d:?:write')).to.eql(['1', '2', '3']);
       done();
     });
+    it('simple id lookup with specific sub-right without wildcard in trie', function(done) {
+      expect(trie.permissions('d:?:b')).to.eql([]);
+      done();
+    });
+    it('simple id lookup with specific sub-right with', function(done) {
+      expect(trie.permissions('d:?:b:r')).to.eql(['1', '2']);
+      done();
+    });
     it('explicit lookup at end', function(done) {
       expect(trie.permissions('d:2:?')).to.eql(['read', 'write']);
       expect(trie.permissions('d:4:?')).to.eql(['read']);
