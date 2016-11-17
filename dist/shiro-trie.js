@@ -11,7 +11,7 @@ function uniq(arr) {
     u[arr[i]] = 1;
   }
   return a;
-};
+}
 
 function _add(trie, array) {
   var i, j, node, prevNode, values, goRecursive;
@@ -80,11 +80,12 @@ function _check(trie, array) {
 function _permissions(trie, array) {
   var current, results;
   if (!trie || !array ||
-    typeof(trie) !== 'object' || !Array.isArray(array) ||
+    typeof trie !== 'object' || !Array.isArray(array) ||
     Object.keys(trie).length < 1 || array.length < 1) {
     // for recursion safety, we make sure we have really valid values
     return [];
   }
+  array = [].concat(array);
   // if we have a star permission, we can just return that
   if (trie.hasOwnProperty('*')) {
     return ['*'];
@@ -96,10 +97,44 @@ function _permissions(trie, array) {
     results = Object.keys(trie);
     // if something is coming after the ?,
     // we have to check permission and remove those that are not allowed
-    if (array.length > 0 && array[0] !== '$') {
-      results = results.filter(function(node) {
+    if (array.length > 0 && array.indexOf('$') === -1) {
+      results = results.filter(function (node) {
         return _check(trie[node], array);
       });
+    } else if (array.length > 0) {
+      var count = 0;
+      array.forEach(function (val) {
+        count = count + (val === '$' ? 1 : 0);
+      });
+      if (count > 1) {
+        return [];
+      }
+      var subArray = [].concat(array);
+      var index = subArray.indexOf('$');
+      subArray[index] = '?';
+      var anyValues = results.map(function (node) {
+        return _permissions(trie[node], subArray);
+      }).reduce(function (a, b) {
+        return a.concat(b);
+      });
+      anyValues = uniq(anyValues);
+      var anyResults = [];
+      anyValues.forEach(function concatAnyPermissions (any) {
+        anyResults = anyResults.concat(results.filter(function concatPermissions (node) {
+          subArray[index] = any;
+          return _check(trie[node], subArray);
+        }));
+      });
+
+      // remove duplicates
+      anyResults = uniq(anyResults);
+      // … and * from results
+      for (var i = anyResults.length - 1; i >= 0; i--) {
+        if (anyResults[i] === '*') {
+          anyResults.splice(i, 1);
+        }
+      }
+      return anyResults;
     }
     return results;
   }
@@ -151,7 +186,7 @@ function _expand(permission) {
  * @returns {ShiroTrie}
  * @constructor
  */
-var ShiroTrie = function() {
+var ShiroTrie = function () {
   this.data = {};
   return this;
 };
@@ -160,7 +195,7 @@ var ShiroTrie = function() {
  * removes all data from the Trie (clean startup)
  * @returns {ShiroTrie}
  */
-ShiroTrie.prototype.reset = function() {
+ShiroTrie.prototype.reset = function () {
   this.data = {};
   return this;
 };
@@ -170,7 +205,7 @@ ShiroTrie.prototype.reset = function() {
  * @param {...string|...Array} args - Any number of permission string(s) or String Array(s)
  * @returns {ShiroTrie}
  */
-ShiroTrie.prototype.add = function() {
+ShiroTrie.prototype.add = function () {
   var args = [].concat.apply([], arguments);
   var arg;
   for (arg in args) {
@@ -186,12 +221,12 @@ ShiroTrie.prototype.add = function() {
  * @param string The string to check. Should not contain * – always check for the most explicit permission
  * @returns {*}
  */
-ShiroTrie.prototype.check = function(string) {
-  if (typeof(string) !== 'string') {
+ShiroTrie.prototype.check = function (string) {
+  if (typeof string !== 'string') {
     return false;
   }
   if (string.indexOf(',') !== -1) { // expand string to single comma-less permissions...
-    return _expand(string).map(function(permission) {
+    return _expand(string).map(function (permission) {
       return _check(this.data, permission.split(':'));
     }, this).every(Boolean); // ... and make sure they are all allowed
   }
@@ -202,7 +237,7 @@ ShiroTrie.prototype.check = function(string) {
  * return the Trie data
  * @returns {{}|*}
  */
-ShiroTrie.prototype.get = function() {
+ShiroTrie.prototype.get = function () {
   return this.data;
 };
 
@@ -212,15 +247,15 @@ ShiroTrie.prototype.get = function() {
  *   docs for details.
  * @returns {*}
  */
-ShiroTrie.prototype.permissions = function(string) {
-  if (typeof(string) !== 'string') {
+ShiroTrie.prototype.permissions = function (string) {
+  if (typeof string !== 'string') {
     return [];
   }
   return _permissions(this.data, string.split(':'));
 };
 
 module.exports = {
-  new: function() {
+  new: function () {
     return new ShiroTrie();
   },
   _expand: _expand,
