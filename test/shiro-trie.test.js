@@ -283,8 +283,8 @@ describe('shiro-trie node module', function() {
       expect(trie.permissions('d:?:b')).to.eql([]);
       done();
     });
-    it('simple id lookup with specific sub-right with', function(done) {
-      expect(trie.permissions('d:?:b:r')).to.eql(['1', '2']);
+    it('simple id lookup with specific sub-right with any at end', function(done) {
+      expect(trie.permissions('d:?:b:$')).to.eql(['1', '2']);
       done();
     });
     it('explicit lookup at end', function(done) {
