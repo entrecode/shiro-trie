@@ -84,6 +84,7 @@ function _permissions(trie, array) {
     // for recursion safety, we make sure we have really valid values
     return [];
   }
+  array = [].concat(array);
   // if we have a star permission, we can just return that
   if (trie.hasOwnProperty('*')) {
     return ['*'];
@@ -95,10 +96,44 @@ function _permissions(trie, array) {
     results = Object.keys(trie);
     // if something is coming after the ?,
     // we have to check permission and remove those that are not allowed
-    if (array.length > 0 && array[0] !== '$') {
+    if (array.length > 0 && array.indexOf('$') === -1) {
       results = results.filter(function (node) {
         return _check(trie[node], array);
       });
+    } else if (array.length > 0) {
+      var count = 0;
+      array.forEach(function (val) {
+        count = count + (val === '$' ? 1 : 0);
+      });
+      if (count > 1) {
+        return [];
+      }
+      var subArray = [].concat(array);
+      var index = subArray.indexOf('$');
+      subArray[index] = '?';
+      var anyValues = results.map(function (node) {
+        return _permissions(trie[node], subArray);
+      }).reduce(function (a, b) {
+        return a.concat(b);
+      });
+      anyValues = uniq(anyValues);
+      var anyResults = [];
+      anyValues.forEach(function concatAnyPermissions (any) {
+        anyResults = anyResults.concat(results.filter(function concatPermissions (node) {
+          subArray[index] = any;
+          return _check(trie[node], subArray);
+        }));
+      });
+
+      // remove duplicates
+      anyResults = uniq(anyResults);
+      // … and * from results
+      for (var i = anyResults.length - 1; i >= 0; i--) {
+        if (anyResults[i] === '*') {
+          anyResults.splice(i, 1);
+        }
+      }
+      return anyResults;
     }
     return results;
   }
