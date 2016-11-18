@@ -96,50 +96,55 @@ function _permissions(trie, array) {
   if (current === '?') {
     results = Object.keys(trie);
     // if something is coming after the ?,
-    // we have to check permission and remove those that are not allowed
     if (array.length > 0 && array.indexOf('$') === -1) {
+      // we have to check permission and remove those that are not allowed
       results = results.filter(function (node) {
         return _check(trie[node], array);
       });
     } else if (array.length > 0) {
-      var count = 0;
-      array.forEach(function (val) {
-        count = count + (val === '$' ? 1 : 0);
-      });
-      if (count > 1) {
-        return [];
-      }
       var subArray = [].concat(array);
-      var index = subArray.indexOf('$');
-      subArray[index] = '?';
-      var anyValues = results.map(function (node) {
-        return _permissions(trie[node], subArray);
-      }).reduce(function (a, b) {
-        return a.concat(b);
-      });
-      anyValues = uniq(anyValues);
-      var anyResults = [];
-      anyValues.forEach(function concatAnyPermissions (any) {
-        anyResults = anyResults.concat(results.filter(function concatPermissions (node) {
-          subArray[index] = any;
-          return _check(trie[node], subArray);
-        }));
+      var expandTrie = function (trie, array) {
+        var a = [].concat(array);
+
+        var out = Object.keys(trie).map(function (node) {
+          if (node === '*') {
+            return [node];
+          }
+
+          if (array[0] === node || array[0] === '$') {
+            if (array.length > 1) {
+              var child = expandTrie(trie[node], array.slice(1));
+              return child.map(function (inner) {
+                return node + ':' + inner;
+              });
+            }
+            return [node];
+          }
+          return [];
+        }).reduce(function (a, b) {
+          return a.concat(b);
+        }, []);
+
+        return out;
+      };
+
+      var anyObj = {};
+      results.forEach(function (node) {
+        anyObj[node] = expandTrie(trie[node], subArray);
       });
 
-      // remove duplicates
-      anyResults = uniq(anyResults);
-      // … and * from results
-      for (var i = anyResults.length - 1; i >= 0; i--) {
-        if (anyResults[i] === '*') {
-          anyResults.splice(i, 1);
-        }
-      }
-      return anyResults;
+      return results.filter(function (node) {
+        return anyObj[node].map(function (elem) {
+          return _check(trie[node], elem.split(':'));
+        }).reduce(function (a, b) {
+          return a || b;
+        }, false);
+      });
     }
     return results;
   }
   // if we have an 'any' flag, we have to go recursive for all alternatives
-  if (current === '$') {
+  if (current === '$') { // $ before ?
     results = [];
     Object.keys(trie).forEach(function concatPermissions(node) {
       results = results.concat(_permissions(trie[node], [].concat(array)));
