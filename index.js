@@ -102,11 +102,7 @@ function _permissions(trie, array) {
       });
 
       return results.filter(function (node) {
-        return anyObj[node].map(function (elem) {
-          return _check(trie[node], elem.split(':'));
-        }).reduce(function (a, b) {
-          return a || b;
-        }, false);
+        return anyObj[node].length > 0;
       });
     }
     return results;
@@ -154,7 +150,7 @@ function _expand(permission) {
   return results;
 }
 
-function _expandTrie (trie, array) {
+function _expandTrie(trie, array) {
   var a = [].concat(array);
 
   return Object.keys(trie).map(function (node) {
