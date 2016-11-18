@@ -293,8 +293,12 @@ describe('shiro-trie node module', function() {
       expect(trie.permissions('z:?:y:$')).to.eql(['1', '2', '3', '4']);
       done();
     });
-    it('simple id lookup with specific sub-right with multiple any at end not supported', function (done) {
-      expect(trie.permissions('z:?:$:$')).to.eql([]);
+    it('simple id lookup multiple any at end', function (done) {
+      expect(trie.permissions('z:?:$:$')).to.eql(['1', '2', '3', '4', '5']);
+      done();
+    });
+    it('simple id lookup many any at end', function (done) {
+      expect(trie.permissions('z:?:$:$:$:$:$')).to.eql(['1', '2', '3', '4', '5']);
       done();
     });
     it('explicit lookup at end', function(done) {
