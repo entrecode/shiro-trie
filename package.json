@@ -22,7 +22,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "browserify": "14.1.0",
+    "browserify": "14.3.0",
     "chai": "3.5.0",
     "coveralls": "2.13.0",
     "istanbul": "0.4.5",
