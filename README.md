@@ -199,6 +199,21 @@ $ istanbul cover _mocha -- -R spec
 
 ## Changelog
 
+### 0.3.13
+- dependency update
+
+### 0.3.12
+- permission queries now have an implicit `$` at the end
+
+### 0.3.11
+- permission query now supports multiple `$`
+
+### 0.3.10
+- proper handling of `$` after `?` in permission query
+
+### 0.3.9
+- dependency update
+
 ### 0.3.8
 - dependency update
 
