@@ -1,6 +1,4 @@
-#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage][coveralls-image]][coveralls-url] [![Dependency Status][daviddm-image]][daviddm-url]
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/entrecode/shiro-trie.svg)](https://greenkeeper.io/)
+#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage][coveralls-image]][coveralls-url] [![Dependency Status][daviddm-image]][daviddm-url][![Greenkeeper badge](https://badges.greenkeeper.io/entrecode/shiro-trie.svg)](https://greenkeeper.io/)
 
 > Check permissions using Shiro-like strings, put in a trie.
 
