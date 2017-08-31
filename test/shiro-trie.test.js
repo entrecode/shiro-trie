@@ -23,7 +23,7 @@ describe('shiro-trie node module', function() {
 
   describe('building permission trie', function() {
     beforeEach(function(done) {
-      trie = shiroTrie.new();
+      trie = shiroTrie.newTrie();
       done();
     });
     it('single permission', function(done) {
@@ -49,7 +49,7 @@ describe('shiro-trie node module', function() {
     });
     it('non-strings get ignored', function(done) {
       trie.add(['a:b:c:d', 'a:c:c:d']);
-      var trie1 = shiroTrie.new().add(['a:b:c:d', 4, 'a:c:c:d']);
+      var trie1 = shiroTrie.newTrie().add(['a:b:c:d', 4, 'a:c:c:d']);
       expect(trie.get()).to.eql(trie1.get());
       done();
     });
@@ -94,7 +94,7 @@ describe('shiro-trie node module', function() {
 
   describe('checking permissions', function() {
     beforeEach(function(done) {
-      trie = shiroTrie.new();
+      trie = shiroTrie.newTrie();
       done();
     });
     it('simple permission', function(done) {
@@ -138,7 +138,7 @@ describe('shiro-trie node module', function() {
 
   describe('chaining works', function() {
     it('simple add.check', function(done) {
-      expect(shiroTrie.new().add('a:b:c').check('a:b:c:d')).to.eql(true);
+      expect(shiroTrie.newTrie().add('a:b:c').check('a:b:c:d')).to.eql(true);
       done();
     });
   });
@@ -146,125 +146,125 @@ describe('shiro-trie node module', function() {
   describe('more complex wildcard permissions', function() {
 
     it('test0', function() {
-      assert.equal(shiroTrie.new().add('*').check('l1:l2:l3:l4:l5'), true);
+      assert.equal(shiroTrie.newTrie().add('*').check('l1:l2:l3:l4:l5'), true);
     });
     it('test1', function() {
-      assert.equal(shiroTrie.new().add('*').check('l1'), true);
+      assert.equal(shiroTrie.newTrie().add('*').check('l1'), true);
     });
     it('test2', function() {
-      assert.equal(shiroTrie.new().add('*:*').check('l1:l2:l3:l4:l5'), true);
+      assert.equal(shiroTrie.newTrie().add('*:*').check('l1:l2:l3:l4:l5'), true);
     });
     it('test3', function() {
-      assert.equal(shiroTrie.new().add('*:*').check('l1:l2'), true);
+      assert.equal(shiroTrie.newTrie().add('*:*').check('l1:l2'), true);
     });
     it('test4', function() {
-      assert.equal(shiroTrie.new().add('*:*').check('l1'), true);
+      assert.equal(shiroTrie.newTrie().add('*:*').check('l1'), true);
     });
     it('test5', function() {
-      assert.equal(shiroTrie.new().add('*:*:*').check('l1:l2:l3:l4:l5'), true);
+      assert.equal(shiroTrie.newTrie().add('*:*:*').check('l1:l2:l3:l4:l5'), true);
     });
     it('test6', function() {
-      assert.equal(shiroTrie.new().add('*:*:*').check('l1:l2:l3'), true);
+      assert.equal(shiroTrie.newTrie().add('*:*:*').check('l1:l2:l3'), true);
     });
     it('test7', function() {
-      assert.equal(shiroTrie.new().add('*:*:*').check('l1:l2'), true);
+      assert.equal(shiroTrie.newTrie().add('*:*:*').check('l1:l2'), true);
     });
     it('test8', function() {
-      assert.equal(shiroTrie.new().add('*:*:*').check('l1'), true);
+      assert.equal(shiroTrie.newTrie().add('*:*:*').check('l1'), true);
     });
     it('test9', function() {
-      assert.equal(shiroTrie.new().add('newsletter:*:*').check('newsletter:edit'), true);
+      assert.equal(shiroTrie.newTrie().add('newsletter:*:*').check('newsletter:edit'), true);
     });
     it('test10', function() {
-      assert.equal(shiroTrie.new().add('newsletter:*:*').check('newsletter:edit:*'), true);
+      assert.equal(shiroTrie.newTrie().add('newsletter:*:*').check('newsletter:edit:*'), true);
     });
     it('test11', function() {
-      assert.equal(shiroTrie.new().add('newsletter:*:*').check('newsletter:edit:12'), true);
+      assert.equal(shiroTrie.newTrie().add('newsletter:*:*').check('newsletter:edit:12'), true);
     });
   });
 
   describe('fine grained permissions', function() {
     it('test1', function() {
-      assert.equal(shiroTrie.new().add('l1:l2:*').check('l1:l2:l3'), true);
+      assert.equal(shiroTrie.newTrie().add('l1:l2:*').check('l1:l2:l3'), true);
     });
     it('test2', function() {
-      assert.equal(shiroTrie.new().add('l1:l2:*').check('l1:l2'), true);
+      assert.equal(shiroTrie.newTrie().add('l1:l2:*').check('l1:l2'), true);
     });
     it('test3', function() {
-      assert.equal(shiroTrie.new().add('l1:l2:*:*:*').check('l1:l2:l3:l4:l5'), true);
+      assert.equal(shiroTrie.newTrie().add('l1:l2:*:*:*').check('l1:l2:l3:l4:l5'), true);
     });
     it('test4', function() {
-      assert.equal(shiroTrie.new().add('l1').check('l1:l2:l3'), true);
+      assert.equal(shiroTrie.newTrie().add('l1').check('l1:l2:l3'), true);
     });
     it('test5', function() {
-      assert.equal(shiroTrie.new().add('l1:l2').check('l1:l2:l3'), true);
+      assert.equal(shiroTrie.newTrie().add('l1:l2').check('l1:l2:l3'), true);
     });
     it('test6', function() {
-      assert.equal(shiroTrie.new().add('l1:l2').check('l1'), false);
+      assert.equal(shiroTrie.newTrie().add('l1:l2').check('l1'), false);
     });
     it('test7', function() {
-      assert.equal(shiroTrie.new().add('l1:a,b,c:l3').check('l1:a:l3'), true);
+      assert.equal(shiroTrie.newTrie().add('l1:a,b,c:l3').check('l1:a:l3'), true);
     });
     it('test8', function() {
-      assert.equal(shiroTrie.new().add('l1:a,b,c:d,e,f').check('l1:a:l3'), false);
+      assert.equal(shiroTrie.newTrie().add('l1:a,b,c:d,e,f').check('l1:a:l3'), false);
     });
     it('test9', function() {
-      assert.equal(shiroTrie.new().add('l1:a,b,c:d,e,f').check('l1:a:f'), true);
+      assert.equal(shiroTrie.newTrie().add('l1:a,b,c:d,e,f').check('l1:a:f'), true);
     });
     it('test10', function() {
-      assert.equal(shiroTrie.new().add('l1:*:l3').check('l1:l2:l3'), true);
+      assert.equal(shiroTrie.newTrie().add('l1:*:l3').check('l1:l2:l3'), true);
     });
     it('test11', function() {
-      assert.equal(shiroTrie.new().add('l1:*:l3').check('l1:l2:error'), false);
+      assert.equal(shiroTrie.newTrie().add('l1:*:l3').check('l1:l2:error'), false);
     });
     it('test12', function() {
-      assert.equal(shiroTrie.new().add('l1:*:l3').check('l1:l2'), false);
+      assert.equal(shiroTrie.newTrie().add('l1:*:l3').check('l1:l2'), false);
     });
     it('test13', function() {
-      assert.equal(shiroTrie.new().add('*:l2').check('l1:l2'), true);
+      assert.equal(shiroTrie.newTrie().add('*:l2').check('l1:l2'), true);
     });
     it('test14', function() {
-      assert.equal(shiroTrie.new().add('*:l2').check('l1:error'), false);
+      assert.equal(shiroTrie.newTrie().add('*:l2').check('l1:error'), false);
     });
     it('test15', function() {
-      assert.equal(shiroTrie.new().add('*:l2:l3').check('l1:l2:l3'), true);
+      assert.equal(shiroTrie.newTrie().add('*:l2:l3').check('l1:l2:l3'), true);
     });
     it('test16', function() {
-      assert.equal(shiroTrie.new().add('*:l2:l3').check('l1:l2:l3:l4'), true);
+      assert.equal(shiroTrie.newTrie().add('*:l2:l3').check('l1:l2:l3:l4'), true);
     });
     it('test17', function() {
-      assert.equal(shiroTrie.new().add('*:*:l3').check('l1:l2:l3'), true);
+      assert.equal(shiroTrie.newTrie().add('*:*:l3').check('l1:l2:l3'), true);
     });
     it('test18', function() {
-      assert.equal(shiroTrie.new().add('*:*:l3').check('l1:l2:l3:l4'), true);
+      assert.equal(shiroTrie.newTrie().add('*:*:l3').check('l1:l2:l3:l4'), true);
     });
     it('test19', function() {
-      assert.equal(shiroTrie.new().add('*:*:l3').check('l1:l2:error:l4'), false);
+      assert.equal(shiroTrie.newTrie().add('*:*:l3').check('l1:l2:error:l4'), false);
     });
     it('test20', function() {
-      assert.equal(shiroTrie.new().add('newsletter:view,create,edit,delete').check('newsletter:view,create,any,edit,delete'), false);
+      assert.equal(shiroTrie.newTrie().add('newsletter:view,create,edit,delete').check('newsletter:view,create,any,edit,delete'), false);
     });
     it('test21', function() {
-      assert.equal(shiroTrie.new().add('acc:perm:*').check('acc:perm:x:y:z,1,2'), true);
+      assert.equal(shiroTrie.newTrie().add('acc:perm:*').check('acc:perm:x:y:z,1,2'), true);
     });
     it('test22', function() {
-      assert.equal(shiroTrie.new().add('acc:perm:x:y:z').check('acc:perm:x:y:z,1,2'), false);
+      assert.equal(shiroTrie.newTrie().add('acc:perm:x:y:z').check('acc:perm:x:y:z,1,2'), false);
     });
     it('test23', function() {
-      assert.equal(shiroTrie.new().add('acc:perm').check('acc:perm:x,a:y:z,1,2'), true);
+      assert.equal(shiroTrie.newTrie().add('acc:perm').check('acc:perm:x,a:y:z,1,2'), true);
     });
     it('test24', function() {
-      assert.equal(shiroTrie.new().add('acc:perm').check('acc:perm:x,a:*:z,1,2'), true);
+      assert.equal(shiroTrie.newTrie().add('acc:perm').check('acc:perm:x,a:*:z,1,2'), true);
     });
     it('test25', function() {
-      assert.equal(shiroTrie.new().add('acc:perm:x:y:z').check('acc:perm:x:*:z'), false);
+      assert.equal(shiroTrie.newTrie().add('acc:perm:x:y:z').check('acc:perm:x:*:z'), false);
     });
   });
 
   describe('get Permissions', function() {
     var trie;
     before(function(done) {
-      trie = shiroTrie.new();
+      trie = shiroTrie.newTrie();
       trie.add('d:1,2,3:read,write', 'd:4:read', 'x', 'a:1:b:3,4', 'a:2:b:5,6');
       trie.add('z:1,2:y:*', 'z:2,3,4:y:x', 'z:3,4,5:w:v');
       done();
@@ -331,7 +331,7 @@ describe('shiro-trie node module', function() {
       done();
     });
     it('no tree', function(done) {
-      expect(shiroTrie.new().permissions('a:b')).to.eql([]);
+      expect(shiroTrie.newTrie().permissions('a:b')).to.eql([]);
       done();
     });
   });
