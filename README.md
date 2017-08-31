@@ -1,4 +1,4 @@
-#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage][coveralls-image]][coveralls-url] [![Dependency Status][daviddm-image]][daviddm-url]
+#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage][coveralls-image]][coveralls-url] [![Dependency Status][daviddm-image]][daviddm-url][![Greenkeeper badge](https://badges.greenkeeper.io/entrecode/shiro-trie.svg)](https://greenkeeper.io/)
 
 > Check permissions using Shiro-like strings, put in a trie.
 
@@ -41,7 +41,7 @@ Using the shiro-trie plugin in your web-app is pretty simple, too. First, you sh
 ```js
 var shiroTrie = require('shiro-trie');
 
-var account1 = shiroTrie.new();
+var account1 = shiroTrie.newTrie();
 
 account1.add([
   'printer:xpc5000:print',
@@ -125,12 +125,12 @@ The function for checking available permissions is `.permissions(string)`. It re
 var shiroTrie = require('shiro-trie');
 ```
 
-#### shiroTrie.new();
+#### shiroTrie.newTrie(); / shiroTrie.new();
 
 Returns a new ShiroTrie instance.
 
 ```js
-var account1 = shiroTrie.new();
+var account1 = shiroTrie.newTrie();
 ```
 
 ### Instance methods

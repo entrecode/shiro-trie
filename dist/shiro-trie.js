@@ -96,49 +96,14 @@ function _permissions(trie, array) {
   if (current === '?') {
     results = Object.keys(trie);
     // if something is coming after the ?,
-    if (array.length > 0 && array.indexOf('$') === -1) {
-      // we have to check permission and remove those that are not allowed
-      results = results.filter(function (node) {
-        return _check(trie[node], array);
-      });
-    } else if (array.length > 0) {
-      var subArray = [].concat(array);
-      var expandTrie = function (trie, array) {
-        var a = [].concat(array);
-
-        var out = Object.keys(trie).map(function (node) {
-          if (node === '*') {
-            return [node];
-          }
-
-          if (array[0] === node || array[0] === '$') {
-            if (array.length > 1) {
-              var child = expandTrie(trie[node], array.slice(1));
-              return child.map(function (inner) {
-                return node + ':' + inner;
-              });
-            }
-            return [node];
-          }
-          return [];
-        }).reduce(function (a, b) {
-          return a.concat(b);
-        }, []);
-
-        return out;
-      };
-
+    if (array.length > 0) {
       var anyObj = {};
       results.forEach(function (node) {
-        anyObj[node] = expandTrie(trie[node], subArray);
+        anyObj[node] = _expandTrie(trie[node], array);
       });
 
       return results.filter(function (node) {
-        return anyObj[node].map(function (elem) {
-          return _check(trie[node], elem.split(':'));
-        }).reduce(function (a, b) {
-          return a || b;
-        }, false);
+        return anyObj[node].length > 0;
       });
     }
     return results;
@@ -175,8 +140,8 @@ function _expand(permission) {
     if (results.length === 0) {
       results = alternatives;
     } else {
-      alternatives = alternatives.map(function(alternative) {
-        return results.map(function(perm) {
+      alternatives = alternatives.map(function (alternative) {
+        return results.map(function (perm) {
           return perm + ':' + alternative;
         }, this);
       }, this);
@@ -184,6 +149,28 @@ function _expand(permission) {
     }
   }
   return results;
+}
+
+function _expandTrie(trie, array) {
+  var a = [].concat(array);
+
+  return Object.keys(trie).map(function (node) {
+    if (node === '*') {
+      return [node];
+    }
+    if (array[0] === node || array[0] === '$') {
+      if (array.length <= 1) {
+        return [node];
+      }
+      var child = _expandTrie(trie[node], array.slice(1));
+      return child.map(function (inner) {
+        return node + ':' + inner;
+      });
+    }
+    return [];
+  }).reduce(function (a, b) {
+    return a.concat(b);
+  }, []);
 }
 
 /**
@@ -223,7 +210,8 @@ ShiroTrie.prototype.add = function () {
 
 /**
  * check if a specific permission is allowed in the current Trie.
- * @param string The string to check. Should not contain * – always check for the most explicit permission
+ * @param string The string to check. Should not contain * – always check for the most explicit
+ *   permission
  * @returns {*}
  */
 ShiroTrie.prototype.check = function (string) {
@@ -248,8 +236,8 @@ ShiroTrie.prototype.get = function () {
 
 /**
  * check what permissions a certain Trie part contains
- * @param string String to check – should contain exactly one ?. Also possible is usage of the any ($) parameter. See
- *   docs for details.
+ * @param string String to check – should contain exactly one ?. Also possible is usage of the any
+ *   ($) parameter. See docs for details.
  * @returns {*}
  */
 ShiroTrie.prototype.permissions = function (string) {
@@ -260,7 +248,14 @@ ShiroTrie.prototype.permissions = function (string) {
 };
 
 module.exports = {
+  /**
+   * @deprecated since 0.4.0. Use newTrie() instead.
+   * @returns {ShiroTrie}
+   */
   new: function () {
+    return new ShiroTrie();
+  },
+  newTrie: function () {
     return new ShiroTrie();
   },
   _expand: _expand,

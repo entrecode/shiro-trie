@@ -139,8 +139,8 @@ function _expand(permission) {
     if (results.length === 0) {
       results = alternatives;
     } else {
-      alternatives = alternatives.map(function(alternative) {
-        return results.map(function(perm) {
+      alternatives = alternatives.map(function (alternative) {
+        return results.map(function (perm) {
           return perm + ':' + alternative;
         }, this);
       }, this);
@@ -209,7 +209,8 @@ ShiroTrie.prototype.add = function () {
 
 /**
  * check if a specific permission is allowed in the current Trie.
- * @param string The string to check. Should not contain * – always check for the most explicit permission
+ * @param string The string to check. Should not contain * – always check for the most explicit
+ *   permission
  * @returns {*}
  */
 ShiroTrie.prototype.check = function (string) {
@@ -234,8 +235,8 @@ ShiroTrie.prototype.get = function () {
 
 /**
  * check what permissions a certain Trie part contains
- * @param string String to check – should contain exactly one ?. Also possible is usage of the any ($) parameter. See
- *   docs for details.
+ * @param string String to check – should contain exactly one ?. Also possible is usage of the any
+ *   ($) parameter. See docs for details.
  * @returns {*}
  */
 ShiroTrie.prototype.permissions = function (string) {
@@ -246,7 +247,14 @@ ShiroTrie.prototype.permissions = function (string) {
 };
 
 module.exports = {
+  /**
+   * @deprecated since 0.4.0. Use newTrie() instead.
+   * @returns {ShiroTrie}
+   */
   new: function () {
+    return new ShiroTrie();
+  },
+  newTrie: function () {
     return new ShiroTrie();
   },
   _expand: _expand,
