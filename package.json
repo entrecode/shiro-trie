@@ -23,7 +23,7 @@
   "devDependencies": {
     "browserify": "14.4.0",
     "chai": "4.1.2",
-    "coveralls": "2.13.2",
+    "coveralls": "2.13.3",
     "istanbul": "0.4.5",
     "mocha": "3.5.2",
     "mocha-bamboo-reporter": "1.1.1",
