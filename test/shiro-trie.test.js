@@ -259,6 +259,12 @@ describe('shiro-trie node module', function() {
     it('test25', function() {
       assert.equal(shiroTrie.newTrie().add('acc:perm:x:y:z').check('acc:perm:x:*:z'), false);
     });
+    it('test26 (no overwrite when adding comma after star)', function() {
+      assert.equal(shiroTrie.newTrie()
+      .add('a:b:c:d,e')
+      .add('a:b:*:d')
+      .check('a:b:c:e'), true);
+    });
   });
 
   describe('get Permissions', function() {
