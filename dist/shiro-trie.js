@@ -57,20 +57,24 @@ function _check(trie, array) {
     array.push('*');
   }
   for (i = 0; i < array.length; i++) {
-    if (node.hasOwnProperty('*')) {
+    if (node.hasOwnProperty('*') && (array[i] !== '*' && node.hasOwnProperty(array[i]))) {
+      // if there are multiple paths, we have to go recursive
+      return _check(node['*'], array.slice(i+1)) || _check(node[array[i]], array.slice(i+1));
+    } else if (node.hasOwnProperty('*')) {
       // if we find a star leaf in the trie, we are done (everything below is allowed)
       if (Object.keys(node['*']).length === 0) {
         return true;
       }
       // otherwise we have to go deeper
       node = node['*'];
+    } else if (node.hasOwnProperty(array[i])) {
+      // otherwise we go deeper
+      node = node[array[i]];
     } else {
       // if the wanted permission is not found, we return false
       if (!node.hasOwnProperty(array[i])) {
         return false;
       }
-      // otherwise we go deeper
-      node = node[array[i]];
     }
   }
   // word (array) was found in the trie. all good!

@@ -195,9 +195,15 @@ $ istanbul cover _mocha -- -R spec
 
 ## Known issues
 
-- `add(…)` and `permissions(…)` is implemented recursive which is probably not ideal
+- `add(…)` and `permissions(…)` and one case in `_check` is implemented recursive which is probably not ideal
 
 ## Changelog
+
+### 0.4.1
+- fixed a bug where a permission `a:*:c` would overwrite `a:b:c,d` so that `a:b:d` would return `false`
+
+### 0.4.0
+- added typescript typings
 
 ### 0.3.13
 - dependency update

@@ -1,6 +1,6 @@
 {
   "name": "shiro-trie",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Check permissions using Shiro-like strings, put in a trie.",
   "homepage": "https://github.com/entrecode/shiro-trie",
   "main": "index.js",
