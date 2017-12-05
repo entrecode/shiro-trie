@@ -199,6 +199,9 @@ $ istanbul cover _mocha -- -R spec
 
 ## Changelog
 
+### 0.4.2
+- fixed a bug where a star permission would be overwritten
+
 ### 0.4.1
 - fixed a bug where a permission `a:*:c` would overwrite `a:b:c,d` so that `a:b:d` would return `false`
 

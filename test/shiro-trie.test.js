@@ -265,7 +265,7 @@ describe('shiro-trie node module', function() {
       .add('a:b:*:d')
       .check('a:b:c:e'), true);
     });
-    it.only('test27 (no overwrite when adding something after star)', function() {
+    it('test27 (no overwrite when adding something after star)', function() {
       assert.equal(shiroTrie.newTrie()
       .add('a:b')
       .add('a:b:c:d')
