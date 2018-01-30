@@ -88,10 +88,6 @@ function _permissions(trie, array) {
     return [];
   }
   array = [].concat(array);
-  // if we have a star permission, we can just return that
-  if (trie.hasOwnProperty('*')) {
-    return ['*'];
-  }
   // take first element from array
   current = array.shift();
   // the requested part
