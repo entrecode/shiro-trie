@@ -87,6 +87,10 @@ function _permissions(trie, array) {
     // for recursion safety, we make sure we have really valid values
     return [];
   }
+  // if we have a star permission with nothing further down the trie we can just return that
+  if (trie.hasOwnProperty('*') && Object.keys(trie['*']).length === 0) {
+    return ['*'];
+  }
   array = [].concat(array);
   // take first element from array
   current = array.shift();
@@ -125,6 +129,10 @@ function _permissions(trie, array) {
   if (trie.hasOwnProperty(current)) {
     // we have to go deeper!
     return _permissions(trie[current], array);
+  }
+  if (trie.hasOwnProperty('*')) {
+    // if we have a star permission we need to go deeper
+    return _permissions(trie['*'], array);
   }
   return [];
 }
