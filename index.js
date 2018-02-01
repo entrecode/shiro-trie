@@ -126,15 +126,16 @@ function _permissions(trie, array) {
     }
     return u;
   }
+  results = [];
   if (trie.hasOwnProperty(current)) {
     // we have to go deeper!
-    return _permissions(trie[current], array);
+    results = results.concat(_permissions(trie[current], array));
   }
   if (trie.hasOwnProperty('*')) {
     // if we have a star permission we need to go deeper
-    return _permissions(trie['*'], array);
+    results = results.concat(_permissions(trie['*'], array));
   }
-  return [];
+  return results;
 }
 
 function _expand(permission) {
