@@ -294,7 +294,7 @@ describe('shiro-trie node module', function () {
       trie = shiroTrie.newTrie();
       trie.add('d:1,2,3:read,write', 'd:4:read', 'x', 'a:1:b:3,4', 'a:2:b:5,6');
       trie.add('z:1,2:y:*', 'z:2,3,4:y:x', 'z:3,4,5:w:v');
-      trie.add('k:*:l');
+      trie.add('k:*:l,n', 'k:l:m');
       done();
     });
     it('simple id lookup', function (done) {
@@ -343,7 +343,7 @@ describe('shiro-trie node module', function () {
       done();
     });
     it('multiple any flags', function (done) {
-      expect(trie.permissions('$:$:?')).to.eql(['read', 'write', 'b', 'y', 'w', 'l']);
+      expect(trie.permissions('$:$:?')).to.eql(['read', 'write', 'b', 'y', 'w', 'l', 'n', 'm']);
       done();
     });
     it('wildcard', function (done) {
@@ -363,11 +363,11 @@ describe('shiro-trie node module', function () {
       done();
     });
     it('wildcard in the middle', function (done) {
-      expect(trie.permissions('k:l:?')).to.eql(['l']);
+      expect(trie.permissions('k:l:?')).to.eql(['m', 'l', 'n']);
       done();
     });
     it('wildcard in the middle', function (done) {
-      expect(trie.permissions('k:$:?')).to.eql(['l']);
+      expect(trie.permissions('k:$:?')).to.eql(['l', 'n', 'm']);
       done();
     });
   });
