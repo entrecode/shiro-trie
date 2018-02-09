@@ -210,7 +210,12 @@ ShiroTrie.prototype.add = function () {
   var arg;
   for (arg in args) {
     if (args.hasOwnProperty(arg) && typeof(args[arg]) === 'string') {
-      this.data = _add(this.data, args[arg].split(':'));
+      var array = args[arg].split(':');
+      // remove star leaf, because it is added in _add with empty subtree
+      if (array[array.length - 1] === '*') { 
+        array.splice(array.length-1, 1);
+      }
+      this.data = _add(this.data, array);
     }
   }
   return this;

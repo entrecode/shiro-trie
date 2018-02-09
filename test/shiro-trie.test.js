@@ -196,6 +196,16 @@ describe('shiro-trie node module', function () {
     it('test11', function () {
       assert.equal(shiroTrie.newTrie().add('newsletter:*:*').check('newsletter:edit:12'), true);
     });
+    it('test12', function () {
+      var trie = shiroTrie.newTrie().add('a:b:*:x,y').add('a:b,c,*');
+      assert.equal(trie.check('a:b:d:x'), true);
+      assert.equal(trie.check('a:b:d:z'), true);
+    });
+    it('test13', function () {
+      var trie = shiroTrie.newTrie().add('a:b:*:x,y').add('a:b,c');
+      assert.equal(trie.check('a:b:d:x'), true);
+      assert.equal(trie.check('a:b:d:z'), true);
+    });
   });
 
   describe('fine grained permissions', function () {
