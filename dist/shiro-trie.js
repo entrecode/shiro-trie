@@ -211,7 +211,8 @@ ShiroTrie.prototype.add = function () {
   for (arg in args) {
     if (args.hasOwnProperty(arg) && typeof(args[arg]) === 'string') {
       var array = args[arg].split(':');
-      if (array[array.length - 1] === '*') {
+      // remove star leaf, because it is added in _add with empty subtree
+      if (array[array.length - 1] === '*') { 
         array.splice(array.length-1, 1);
       }
       this.data = _add(this.data, array);
