@@ -199,6 +199,9 @@ $ istanbul cover _mocha -- -R spec
 
 ## Changelog
 
+### 0.4.6
+- fixed querying for permissions `a:b:*:c` with query `a:?:$:d` resulting in `b` instead of `[]`.
+
 ### 0.4.5
 - fixed a permission where an explicit star at the end would not overpower previous more fine-granular permissions
 
