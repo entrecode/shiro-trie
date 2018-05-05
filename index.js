@@ -162,19 +162,27 @@ function _expandTrie(trie, array) {
   var a = [].concat(array);
 
   return Object.keys(trie).map(function (node) {
+    var recurse = false;
     if (node === '*') {
-      return [node];
+      if (array.length <= 1 || Object.keys(trie[node]).length === 0) {
+        return [node];
+      }
+      recurse = true;
     }
-    if (array[0] === node || array[0] === '$') {
+    if (node === '*' || array[0] === node || array[0] === '$') {
       if (array.length <= 1) {
         return [node];
       }
-      var child = _expandTrie(trie[node], array.slice(1));
-      return child.map(function (inner) {
-        return node + ':' + inner;
-      });
+      recurse = true;
     }
-    return [];
+
+    if (!recurse) {
+      return [];
+    }
+    var child = _expandTrie(trie[node], array.slice(1));
+    return child.map(function (inner) {
+      return node + ':' + inner;
+    });
   }).reduce(function (a, b) {
     return a.concat(b);
   }, []);
