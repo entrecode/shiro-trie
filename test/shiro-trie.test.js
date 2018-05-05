@@ -373,11 +373,11 @@ describe('shiro-trie node module', function () {
       expect(shiroTrie.newTrie().permissions('a:b')).to.eql([]);
       done();
     });
-    it('wildcard in the middle', function (done) {
+    it('wildcard in the middle and lookup right after it', function (done) {
       expect(trie.permissions('k:l:?')).to.eql(['m', 'l', 'n']);
       done();
     });
-    it('wildcard in the middle', function (done) {
+    it('ignored wildcard with lookup after it', function (done) {
       expect(trie.permissions('k:$:?')).to.eql(['l', 'n', 'm']);
       done();
     });
