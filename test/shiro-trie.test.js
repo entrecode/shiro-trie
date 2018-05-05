@@ -305,6 +305,7 @@ describe('shiro-trie node module', function () {
       trie.add('d:1,2,3:read,write', 'd:4:read', 'x', 'a:1:b:3,4', 'a:2:b:5,6');
       trie.add('z:1,2:y:*', 'z:2,3,4:y:x', 'z:3,4,5:w:v');
       trie.add('k:*:l,n', 'k:l:m');
+      trie.add('m:n:*:p:q');
       done();
     });
     it('simple id lookup', function (done) {
@@ -378,6 +379,22 @@ describe('shiro-trie node module', function () {
     });
     it('wildcard in the middle', function (done) {
       expect(trie.permissions('k:$:?')).to.eql(['l', 'n', 'm']);
+      done();
+    });
+    it('simple id lookup with any and explicit sub-right at end', function (done) {
+      expect(trie.permissions('m:?:$:p')).to.eql(['n']);
+      done();
+    });
+    it('simple id lookup with any and multiple explicit sub-right at end', function (done) {
+      expect(trie.permissions('m:?:$:p:q')).to.eql(['n']);
+      done();
+    });
+    it('simple id lookup with any and wrong explicit sub-right at end', function (done) {
+      expect(trie.permissions('m:?:$:q')).to.eql([]);
+      done();
+    });
+    it('simple id lookup with any and wrong explicit sub-right at end #2', function (done) {
+      expect(trie.permissions('m:?:$:p:z')).to.eql([]);
       done();
     });
   });
