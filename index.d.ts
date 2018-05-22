@@ -11,7 +11,7 @@ declare module 'shiro-trie' {
   }
 
   export interface ShiroTrie {
-    constructor();
+    constructor(): ShiroTrie;
 
     reset: () => ShiroTrie;
 
