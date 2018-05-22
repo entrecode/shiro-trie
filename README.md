@@ -199,6 +199,9 @@ $ istanbul cover _mocha -- -R spec
 
 ## Changelog
 
+### 0.4.7
+- fixed typings returntype of constructor
+
 ### 0.4.6
 - fixed querying for permissions `a:b:*:c` with query `a:?:$:d` resulting in `b` instead of `[]`.
 
