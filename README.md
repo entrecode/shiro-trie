@@ -32,7 +32,6 @@ var shiroTrie = require('shiro-trie');
 Using the shiro-trie plugin in your web-app is pretty simple, too. First, you should include the script file to your HTML-file:
 
 ```html
-<script type="text/javascript" src="bower_components/lodash/lodash.js" /> <!-- shiro-trie is dependant on lodash! -->
 <script type="text/javascript" src="bower_components/shiro-trie/dist/shiro-trie.js" />
 ```
 
