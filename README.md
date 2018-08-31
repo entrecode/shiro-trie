@@ -198,6 +198,10 @@ $ istanbul cover _mocha -- -R spec
 
 ## Changelog
 
+### 0.4.8
+- removed lodash dependency in readme
+- applied patches
+
 ### 0.4.7
 - fixed typings returntype of constructor
 
