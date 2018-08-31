@@ -32,7 +32,6 @@ var shiroTrie = require('shiro-trie');
 Using the shiro-trie plugin in your web-app is pretty simple, too. First, you should include the script file to your HTML-file:
 
 ```html
-<script type="text/javascript" src="bower_components/lodash/lodash.js" /> <!-- shiro-trie is dependant on lodash! -->
 <script type="text/javascript" src="bower_components/shiro-trie/dist/shiro-trie.js" />
 ```
 
@@ -198,6 +197,10 @@ $ istanbul cover _mocha -- -R spec
 - `add(…)` and `permissions(…)` and one case in `_check` is implemented recursive which is probably not ideal
 
 ## Changelog
+
+### 0.4.8
+- removed lodash dependency in readme
+- applied patches
 
 ### 0.4.7
 - fixed typings returntype of constructor
