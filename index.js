@@ -25,6 +25,8 @@ function _add(trie, array) {
       // permission is new -> create
       if (!node.hasOwnProperty(values[j])) {
         node[values[j]] = {};
+      } else if (node.hasOwnProperty('*') && Object.keys(node['*']).length === 0) { 
+        return trie;
       }
       if (values.length > 1) {
         // if we have a comma separated permission list, we have to go recursive

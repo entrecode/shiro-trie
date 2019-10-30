@@ -296,6 +296,31 @@ describe('shiro-trie node module', function () {
       .add('a:b:c:d')
       .check('a:b:c:e'), true);
     });
+    it('test28 (star at end trumps all, more mighty permission first)', function() {
+      var trie = shiroTrie
+        .newTrie()
+        .add('a:b')
+        .add('a:b:*:d');
+      assert.equal(trie.check('a:b:c:e'), true);
+    });
+    it('test29 (star at end trumps all, more mighty permission last)', function() {
+      assert.equal(
+        shiroTrie
+          .newTrie()
+          .add(['a:b:*:d', 'a:b'])
+          .check('a:b:c:e'),
+        true
+      );
+    });
+    it('test30 (multiple *:x permissions dont give *:*)', function() {
+      assert.equal(
+        shiroTrie
+          .newTrie()
+          .add(['a:b:*:d', 'a:b:*:e'])
+          .check('a:b:c:f'),
+        false
+      );
+    });
   });
 
   describe('get Permissions', function () {
