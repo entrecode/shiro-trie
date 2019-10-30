@@ -198,6 +198,9 @@ $ istanbul cover _mocha -- -R spec
 
 ## Changelog
 
+### 0.4.9
+- made sure that permissions like `a:*:c` don't overwrite `a:*`
+
 ### 0.4.8
 - removed lodash dependency in readme
 - applied patches
