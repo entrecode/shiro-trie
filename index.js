@@ -13,7 +13,7 @@ function uniq(arr) {
 }
 
 function _add(trie, array) {
-  var i, j, node, prevNode, values, goRecursive;
+  var i, j, node, values, goRecursive;
   node = trie;
   goRecursive = false;
   // go through permission string array
@@ -38,13 +38,12 @@ function _add(trie, array) {
         i = array.length;
       } else {
         // if we don't need recursion, we just go deeper
-        prevNode = node;
         node = node[values[j]];
       }
     }
   }
   // if we did not went recursive, we close the Trie with a * leaf
-  if (!goRecursive && (!prevNode || !prevNode.hasOwnProperty('*'))) {
+  if (!goRecursive) {
     node['*'] = {};
   }
   return trie;
