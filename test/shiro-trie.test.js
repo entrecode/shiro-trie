@@ -322,8 +322,8 @@ describe('shiro-trie node module', function () {
       );
     });
     it('test31 (order of permissions is irrelevant)', function () {
-      const trie1 = shiroTrie.newTrie().add(['a:*', '*:*:d']);
-      const trie2 = shiroTrie.newTrie().add(['*:*:d', 'a:*']);
+      var trie1 = shiroTrie.newTrie().add(['a:*', '*:*:d']);
+      var trie2 = shiroTrie.newTrie().add(['*:*:d', 'a:*']);
       expect(trie1.get()).to.eql(trie2.get());
       assert.equal(trie1.check('a:b:c'), true);
       assert.equal(trie1.check('b:c:d'), true);
