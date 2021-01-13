@@ -1,6 +1,7 @@
 ## <small>0.4.10 (2021-01-13)</small>
 
 * fix: order of permissions irrelevant ([1260fcd](https://github.com/entrecode/shiro-trie/commit/1260fcd)), closes [#147](https://github.com/entrecode/shiro-trie/issues/147)
+* chore: new changelog ([48e9c65](https://github.com/entrecode/shiro-trie/commit/48e9c65))
 * chore: updated travis.yml ([cd45e20](https://github.com/entrecode/shiro-trie/commit/cd45e20))
 * chore(package): update coveralls to version 3.0.8 ([b27be6b](https://github.com/entrecode/shiro-trie/commit/b27be6b)), closes [#142](https://github.com/entrecode/shiro-trie/issues/142)
 * chore(package): update coveralls to version 3.0.9 ([b71921d](https://github.com/entrecode/shiro-trie/commit/b71921d)), closes [#142](https://github.com/entrecode/shiro-trie/issues/142)
