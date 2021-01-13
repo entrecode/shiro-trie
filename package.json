@@ -1,6 +1,6 @@
 {
   "name": "shiro-trie",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "Check permissions using Shiro-like strings, put in a trie.",
   "homepage": "https://github.com/entrecode/shiro-trie",
   "main": "index.js",
@@ -21,19 +21,20 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "browserify": "16.2.3",
-    "chai": "4.1.2",
-    "coveralls": "3.0.2",
+    "browserify": "17.0.0",
+    "chai": "4.2.0",
+    "conventional-changelog-cli": "^2.1.1",
+    "coveralls": "3.1.0",
     "istanbul": "0.4.5",
-    "mocha": "5.2.0",
-    "mocha-bamboo-reporter": "1.1.2",
-    "mocha-lcov-reporter": "1.3.0",
-    "karma": "3.1.0",
+    "karma": "5.2.3",
     "karma-bamboo-reporter": "0.1.2",
     "karma-chai-plugins": "0.9.0",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-mocha": "1.3.0",
+    "karma-chrome-launcher": "3.1.0",
+    "karma-mocha": "2.0.1",
     "karma-phantomjs-launcher": "1.0.4",
+    "mocha": "7.2.0",
+    "mocha-bamboo-reporter": "1.1.2",
+    "mocha-lcov-reporter": "1.3.0",
     "phantomjs-prebuilt": "2.1.16"
   },
   "scripts": {
@@ -41,6 +42,7 @@
     "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R dot ./test/*",
     "test-backend": "./node_modules/mocha/bin/mocha -R dot ./test/*",
     "test-browser": "npm run-script build &&  ./node_modules/karma/bin/karma start",
-    "build": "browserify -x _ -r ./index.js -s shiroTrie -o ./dist/shiro-trie.js"
+    "build": "browserify -x _ -r ./index.js -s shiroTrie -o ./dist/shiro-trie.js",
+    "changelog": "conventional-changelog -i CHANGELOG.md -s"
   }
 }
