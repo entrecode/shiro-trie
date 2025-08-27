@@ -32,29 +32,6 @@ const hasWildcardAccess = (node) => {
   return STAR in node && isEmpty(node[STAR]);
 };
 
-// Compress redundant wildcard paths in the trie
-const compressTrie = (node) => {
-  if (!node || typeof node !== 'object') {
-    return node;
-  }
-  
-  const keys = getKeys(node);
-  
-  // If this node has a wildcard with empty subtree, remove all other children
-  if (hasWildcardAccess(node)) {
-    return { [STAR]: {} };
-  }
-  
-  // Recursively compress children
-  for (const key of keys) {
-    if (key !== STAR) {
-      node[key] = compressTrie(node[key]);
-    }
-  }
-  
-  return node;
-};
-
 const _add = (trie, array) => {
   // Normalize the permission array to remove redundant wildcards
   const normalizedArray = normalizePermission(array);
@@ -117,6 +94,7 @@ const _check = (trie, array) => {
     array.push(STAR);
   }
   
+  // we iterate one step beyond the length of the array to check for wildcard access at the end
   for (let i = 0; i <= array.length; i++) {
     const current = array[i];
     
@@ -138,9 +116,6 @@ const _check = (trie, array) => {
       return false;
     }
   }
-  
-  // word (array) was found in the trie. all good!
-  return true;
 };
 
 const _permissions = (trie, array) => {
@@ -321,15 +296,6 @@ class ShiroTrie {
    */
   get() {
     return this.data;
-  }
-
-  /**
-   * Compress the trie to remove redundant paths and optimize structure
-   * @returns {ShiroTrie}
-   */
-  compress() {
-    this.data = compressTrie(this.data);
-    return this;
   }
 
   /**
