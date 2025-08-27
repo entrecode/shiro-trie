@@ -17,14 +17,61 @@ const isEmpty = (obj) => getKeys(obj).length === 0;
 // Pre-allocate common arrays
 const EMPTY_ARRAY = [];
 
+// Optimized permission normalization - removes redundant wildcards
+const normalizePermission = (array) => {
+  // Remove trailing wildcards since they're implicit
+  let normalized = [...array];
+  while (normalized.length > 0 && normalized[normalized.length - 1] === STAR) {
+    normalized.pop();
+  }
+  return normalized;
+};
+
+// Check if a node has a wildcard that grants all permissions at this level
+const hasWildcardAccess = (node) => {
+  return STAR in node && isEmpty(node[STAR]);
+};
+
+// Compress redundant wildcard paths in the trie
+const compressTrie = (node) => {
+  if (!node || typeof node !== 'object') {
+    return node;
+  }
+  
+  const keys = getKeys(node);
+  
+  // If this node has a wildcard with empty subtree, remove all other children
+  if (hasWildcardAccess(node)) {
+    return { [STAR]: {} };
+  }
+  
+  // Recursively compress children
+  for (const key of keys) {
+    if (key !== STAR) {
+      node[key] = compressTrie(node[key]);
+    }
+  }
+  
+  return node;
+};
+
 const _add = (trie, array) => {
+  // Normalize the permission array to remove redundant wildcards
+  const normalizedArray = normalizePermission(array);
+  
+  // If the normalized array is empty, we have a root wildcard
+  if (normalizedArray.length === 0) {
+    trie[STAR] = {};
+    return trie;
+  }
+  
   let node = trie;
   let goRecursive = false;
   
   // go through permission string array
-  for (let i = 0; i < array.length; i++) {
+  for (let i = 0; i < normalizedArray.length; i++) {
     // split by comma - cache the split result
-    const values = array[i].split(COMMA);
+    const values = normalizedArray[i].includes(COMMA) ? normalizedArray[i].split(COMMA) : [normalizedArray[i]];
     const valuesLength = values.length;
     
     // default: only once (no comma separation)
@@ -34,18 +81,19 @@ const _add = (trie, array) => {
       // permission is new -> create
       if (!(value in node)) {
         node[value] = {};
-      } else if (STAR in node && isEmpty(node[STAR])) { 
+      } else if (hasWildcardAccess(node[value])) { 
+        // If this node already has wildcard access, no need to add more
         return trie;
       }
       
       if (valuesLength > 1) {
         // if we have a comma separated permission list, we have to go recursive
         // save the remaining permission array (subTrie has to be appended to each one)
-        goRecursive = goRecursive || array.slice(i + 1);
+        goRecursive = goRecursive || normalizedArray.slice(i + 1);
         // call recursion for this subTrie
         node[value] = _add(node[value], goRecursive);
         // break outer loop
-        i = array.length;
+        i = normalizedArray.length;
       } else {
         // if we don't need recursion, we just go deeper
         node = node[value];
@@ -72,8 +120,9 @@ const _check = (trie, array) => {
   for (let i = 0; i <= array.length; i++) {
     const current = array[i];
     
-    if (STAR in node && isEmpty(node[STAR])) {
-      // if we find a star leaf in the trie, we are done (everything below is allowed)
+    // If we find a wildcard with empty subtree at this level, we're done
+    // This means we have permission for everything at this level and below
+    if (hasWildcardAccess(node)) {
       return true;
     } else if (STAR in node && current !== STAR && current in node) {
       // if there are multiple paths, we have to go recursive
@@ -103,7 +152,7 @@ const _permissions = (trie, array) => {
   }
   
   // if we have a star permission with nothing further down the trie we can just return that
-  if (STAR in trie && isEmpty(trie[STAR])) {
+  if (hasWildcardAccess(trie)) {
     return [STAR];
   }
   
@@ -160,7 +209,7 @@ const _expand = (permission) => {
   const parts = permission.split(COLON);
   
   for (let i = 0; i < parts.length; i++) {
-    const alternatives = parts[i].split(COMMA);
+    const alternatives = parts[i].includes(COMMA) ? parts[i].split(COMMA) : [parts[i]];
     if (results.length === 0) {
       results.push(...alternatives);
     } else {
@@ -234,10 +283,7 @@ class ShiroTrie {
     for (const arg of flatArgs) {
       if (typeof arg === 'string') {
         const array = arg.split(COLON);
-        // remove star leaf, because it is added in _add with empty subtree
-        if (array[array.length - 1] === STAR) { 
-          array.splice(array.length - 1, 1);
-        }
+        // The normalization is now handled in _add function
         this.data = _add(this.data, array);
       }
     }
@@ -255,6 +301,11 @@ class ShiroTrie {
       return false;
     }
     
+    // Early check: if the trie has a root wildcard, everything is allowed
+    if (hasWildcardAccess(this.data)) {
+      return true;
+    }
+    
     if (string.includes(COMMA)) { // expand string to single comma-less permissions...
       return _expand(string).map((permission) => 
         _check(this.data, permission.split(COLON))
@@ -270,6 +321,15 @@ class ShiroTrie {
    */
   get() {
     return this.data;
+  }
+
+  /**
+   * Compress the trie to remove redundant paths and optimize structure
+   * @returns {ShiroTrie}
+   */
+  compress() {
+    this.data = compressTrie(this.data);
+    return this;
   }
 
   /**
