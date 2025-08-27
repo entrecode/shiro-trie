@@ -1,6 +1,21 @@
 'use strict';
 
+// Cache frequently used values
+const STAR = '*';
+const QUESTION = '?';
+const DOLLAR = '$';
+const COLON = ':';
+const COMMA = ',';
+
+// Optimized uniq function with Set
 const uniq = (arr) => Array.from(new Set(arr));
+
+// Cache Object.keys for better performance
+const getKeys = (obj) => Object.keys(obj);
+const isEmpty = (obj) => getKeys(obj).length === 0;
+
+// Pre-allocate common arrays
+const EMPTY_ARRAY = [];
 
 const _add = (trie, array) => {
   let node = trie;
@@ -8,21 +23,22 @@ const _add = (trie, array) => {
   
   // go through permission string array
   for (let i = 0; i < array.length; i++) {
-    // split by comma
-    const values = array[i].split(',');
+    // split by comma - cache the split result
+    const values = array[i].split(COMMA);
+    const valuesLength = values.length;
     
     // default: only once (no comma separation)
-    for (let j = 0; j < values.length; j++) {
+    for (let j = 0; j < valuesLength; j++) {
       const value = values[j];
       
       // permission is new -> create
-      if (!node.hasOwnProperty(value)) {
+      if (!(value in node)) {
         node[value] = {};
-      } else if (node.hasOwnProperty('*') && Object.keys(node['*']).length === 0) { 
+      } else if (STAR in node && isEmpty(node[STAR])) { 
         return trie;
       }
       
-      if (values.length > 1) {
+      if (valuesLength > 1) {
         // if we have a comma separated permission list, we have to go recursive
         // save the remaining permission array (subTrie has to be appended to each one)
         goRecursive = goRecursive || array.slice(i + 1);
@@ -39,7 +55,7 @@ const _add = (trie, array) => {
   
   // if we did not went recursive, we close the Trie with a * leaf
   if (!goRecursive) {
-    node['*'] = {};
+    node[STAR] = {};
   }
   
   return trie;
@@ -49,23 +65,23 @@ const _check = (trie, array) => {
   let node = trie;
   
   // add implicit star at the end
-  if (array.length < 1 || array[array.length - 1] !== '*') {
-    array.push('*');
+  if (array.length < 1 || array[array.length - 1] !== STAR) {
+    array.push(STAR);
   }
   
   for (let i = 0; i < array.length; i++) {
     const current = array[i];
     
-    if (node.hasOwnProperty('*') && Object.keys(node['*']).length === 0) {
+    if (STAR in node && isEmpty(node[STAR])) {
       // if we find a star leaf in the trie, we are done (everything below is allowed)
       return true;
-    } else if (node.hasOwnProperty('*') && current !== '*' && node.hasOwnProperty(current)) {
+    } else if (STAR in node && current !== STAR && current in node) {
       // if there are multiple paths, we have to go recursive
-      return _check(node['*'], array.slice(i + 1)) || _check(node[current], array.slice(i + 1));
-    } else if (node.hasOwnProperty('*')) {
+      return _check(node[STAR], array.slice(i + 1)) || _check(node[current], array.slice(i + 1));
+    } else if (STAR in node) {
       // otherwise we have to go deeper
-      node = node['*'];
-    } else if (node.hasOwnProperty(current)) {
+      node = node[STAR];
+    } else if (current in node) {
       // otherwise we go deeper
       node = node[current];
     } else {
@@ -81,14 +97,14 @@ const _check = (trie, array) => {
 const _permissions = (trie, array) => {
   if (!trie || !array ||
     typeof trie !== 'object' || !Array.isArray(array) ||
-    Object.keys(trie).length < 1 || array.length < 1) {
+    isEmpty(trie) || array.length < 1) {
     // for recursion safety, we make sure we have really valid values
-    return [];
+    return EMPTY_ARRAY;
   }
   
   // if we have a star permission with nothing further down the trie we can just return that
-  if (trie.hasOwnProperty('*') && Object.keys(trie['*']).length === 0) {
-    return ['*'];
+  if (STAR in trie && isEmpty(trie[STAR])) {
+    return [STAR];
   }
   
   array = [].concat(array);
@@ -96,8 +112,8 @@ const _permissions = (trie, array) => {
   const current = array.shift();
   
   // the requested part
-  if (current === '?') {
-    const results = Object.keys(trie);
+  if (current === QUESTION) {
+    const results = getKeys(trie);
     // if something is coming after the ?,
     if (array.length > 0) {
       const anyObj = {};
@@ -111,16 +127,16 @@ const _permissions = (trie, array) => {
   }
   
   // if we have an 'any' flag, we have to go recursive for all alternatives
-  if (current === '$') { // $ before ?
+  if (current === DOLLAR) { // $ before ?
     const results = [];
-    Object.keys(trie).forEach((node) => {
+    getKeys(trie).forEach((node) => {
       results.push(..._permissions(trie[node], [].concat(array)));
     });
     // remove duplicates
     const u = uniq(results);
     // … and * from results
     for (let i = u.length - 1; i >= 0; i--) {
-      if (u[i] === '*') {
+      if (u[i] === STAR) {
         u.splice(i, 1);
       }
     }
@@ -128,31 +144,35 @@ const _permissions = (trie, array) => {
   }
   
   const results = [];
-  if (trie.hasOwnProperty(current)) {
+  if (current in trie) {
     // we have to go deeper!
     results.push(..._permissions(trie[current], array));
   }
-  if (trie.hasOwnProperty('*')) {
+  if (STAR in trie) {
     // if we have a star permission we need to go deeper
-    results.push(..._permissions(trie['*'], array));
+    results.push(..._permissions(trie[STAR], array));
   }
   return results;
 };
 
 const _expand = (permission) => {
   const results = [];
-  const parts = permission.split(':');
+  const parts = permission.split(COLON);
   
   for (let i = 0; i < parts.length; i++) {
-    const alternatives = parts[i].split(',');
+    const alternatives = parts[i].split(COMMA);
     if (results.length === 0) {
       results.push(...alternatives);
     } else {
-      const newAlternatives = alternatives.map((alternative) => 
-        results.map((perm) => `${perm}:${alternative}`)
-      );
+      // More efficient array handling
+      const newResults = [];
+      for (const alternative of alternatives) {
+        for (const perm of results) {
+          newResults.push(perm + COLON + alternative);
+        }
+      }
       results.length = 0;
-      results.push(...[].concat(...uniq(newAlternatives)));
+      results.push(...uniq(newResults));
     }
   }
   return results;
@@ -161,15 +181,15 @@ const _expand = (permission) => {
 const _expandTrie = (trie, array) => {
   const a = [...array];
 
-  return Object.keys(trie).map((node) => {
+  return getKeys(trie).map((node) => {
     let recurse = false;
-    if (node === '*') {
-      if (array.length <= 1 || Object.keys(trie[node]).length === 0) {
+    if (node === STAR) {
+      if (array.length <= 1 || isEmpty(trie[node])) {
         return [node];
       }
       recurse = true;
     }
-    if (node === '*' || array[0] === node || array[0] === '$') {
+    if (node === STAR || array[0] === node || array[0] === DOLLAR) {
       if (array.length <= 1) {
         return [node];
       }
@@ -177,11 +197,11 @@ const _expandTrie = (trie, array) => {
     }
 
     if (!recurse) {
-      return [];
+      return EMPTY_ARRAY;
     }
     const child = _expandTrie(trie[node], array.slice(1));
-    return child.map((inner) => `${node}:${inner}`);
-  }).reduce((a, b) => a.concat(b), []);
+    return child.map((inner) => node + COLON + inner);
+  }).reduce((a, b) => a.concat(b), EMPTY_ARRAY);
 };
 
 /**
@@ -213,9 +233,9 @@ class ShiroTrie {
     
     for (const arg of flatArgs) {
       if (typeof arg === 'string') {
-        const array = arg.split(':');
+        const array = arg.split(COLON);
         // remove star leaf, because it is added in _add with empty subtree
-        if (array[array.length - 1] === '*') { 
+        if (array[array.length - 1] === STAR) { 
           array.splice(array.length - 1, 1);
         }
         this.data = _add(this.data, array);
@@ -235,13 +255,13 @@ class ShiroTrie {
       return false;
     }
     
-    if (string.indexOf(',') !== -1) { // expand string to single comma-less permissions...
+    if (string.includes(COMMA)) { // expand string to single comma-less permissions...
       return _expand(string).map((permission) => 
-        _check(this.data, permission.split(':'))
+        _check(this.data, permission.split(COLON))
       ).every(Boolean); // ... and make sure they are all allowed
     }
     
-    return _check(this.data, string.split(':'));
+    return _check(this.data, string.split(COLON));
   }
 
   /**
@@ -260,9 +280,9 @@ class ShiroTrie {
    */
   permissions(string) {
     if (typeof string !== 'string') {
-      return [];
+      return EMPTY_ARRAY;
     }
-    return _permissions(this.data, string.split(':'));
+    return _permissions(this.data, string.split(COLON));
   }
 }
 
