@@ -206,6 +206,14 @@ describe('shiro-trie node module', function () {
       assert.equal(trie.check('a:b:d:x'), true);
       assert.equal(trie.check('a:b:d:z'), true);
     });
+    it('test14', function () {
+      var trie = shiroTrie.newTrie().add('a:b:*:*:c');
+      assert.equal(trie.check('a:b:c'), false);
+      assert.equal(trie.check('a:b:c:d'), false);
+      assert.equal(trie.check('a:b:c:d:c'), true);
+      assert.equal(trie.check('a:b:c:d:d'), false);
+      assert.equal(trie.check('a:b:c:d:c:d'), true);
+    });
   });
 
   describe('fine grained permissions', function () {
