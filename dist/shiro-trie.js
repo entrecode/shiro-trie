@@ -95,6 +95,7 @@ const _check = (trie, array) => {
     array.push(STAR);
   }
   
+  // we iterate one step beyond the length of the array to check for wildcard access at the end
   for (let i = 0; i <= array.length; i++) {
     const current = array[i];
     
@@ -116,9 +117,6 @@ const _check = (trie, array) => {
       return false;
     }
   }
-  
-  // word (array) was found in the trie. all good!
-  return true;
 };
 
 const _permissions = (trie, array) => {
