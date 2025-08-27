@@ -69,7 +69,7 @@ const _check = (trie, array) => {
     array.push(STAR);
   }
   
-  for (let i = 0; i < array.length; i++) {
+  for (let i = 0; i <= array.length; i++) {
     const current = array[i];
     
     if (STAR in node && isEmpty(node[STAR])) {
