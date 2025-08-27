@@ -3,7 +3,6 @@
 
 module.exports = function(config) {
   config.set({
-
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
@@ -12,10 +11,7 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai'],
 
     // list of files / patterns to load in the browser
-    files: [
-      'dist/shiro-trie.js',
-      'test/**/*.test.js',
-    ],
+    files: ['dist/shiro-trie.js', 'test/**/*.test.js'],
 
     // list of files to exclude
     exclude: [],
@@ -27,11 +23,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['dots', 'bamboo'],
-
-    bambooReporter: {
-      filename: 'test/results.json', // optional, defaults to "mocha.json"
-    },
+    reporters: ['dots'],
 
     // web server port
     port: 9876,
@@ -52,7 +44,7 @@ module.exports = function(config) {
     //browsers: ['Chrome'],
     //browsers: ['Firefox'], // install launcher
     //browsers: ['Safari'],  // install launcher
-    browsers: ['PhantomJS'],
+    browsers: ['ChromeHeadless'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits

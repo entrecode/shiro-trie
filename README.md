@@ -1,4 +1,4 @@
-#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage][coveralls-image]][coveralls-url] [![Dependency Status][daviddm-image]][daviddm-url][![Greenkeeper badge](https://badges.greenkeeper.io/entrecode/shiro-trie.svg)](https://greenkeeper.io/)
+#  [![NPM version][npm-image]][npm-url] [![Coverage][coveralls-image]][coveralls-url]
 
 > Check permissions using Shiro-like strings, put in a trie.
 
@@ -206,9 +206,5 @@ MIT © [entrecode GmbH](https://entrecode.de)
 
 [npm-image]: https://badge.fury.io/js/shiro-trie.svg
 [npm-url]: https://npmjs.org/package/shiro-trie
-[travis-image]: https://travis-ci.org/entrecode/shiro-trie.svg?branch=master
-[travis-url]: https://travis-ci.org/entrecode/shiro-trie
 [coveralls-image]: https://coveralls.io/repos/entrecode/shiro-trie/badge.svg?branch=master&service=github
 [coveralls-url]: https://coveralls.io/github/entrecode/shiro-trie?branch=master
-[daviddm-image]: https://david-dm.org/entrecode/shiro-trie.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/entrecode/shiro-trie

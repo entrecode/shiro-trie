@@ -2,15 +2,16 @@
 'use strict';
 
 function uniq(arr) {
-  var u = {}, a = [];
-  for (var i = 0, l = arr.length; i < l; ++i) {
-    if (Object.prototype.hasOwnProperty.call(u, arr[i])) {
-      continue;
-    }
-    a.push(arr[i]);
-    u[arr[i]] = 1;
-  }
-  return a;
+  return Array.from(new Set(arr));
+  // var u = {}, a = [];
+  // for (var i = 0, l = arr.length; i < l; ++i) {
+  //   if (Object.prototype.hasOwnProperty.call(u, arr[i])) {
+  //     continue;
+  //   }
+  //   a.push(arr[i]);
+  //   u[arr[i]] = 1;
+  // }
+  // return a;
 }
 
 function _add(trie, array) {
@@ -270,13 +271,6 @@ ShiroTrie.prototype.permissions = function (string) {
 };
 
 module.exports = {
-  /**
-   * @deprecated since 0.4.0. Use newTrie() instead.
-   * @returns {ShiroTrie}
-   */
-  new: function () {
-    return new ShiroTrie();
-  },
   newTrie: function () {
     return new ShiroTrie();
   },
