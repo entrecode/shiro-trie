@@ -1,8 +1,12 @@
+export interface ShiroTrieNode {
+  [segment: string]: ShiroTrieNode;
+}
+
 export interface ShiroTrie {
   reset(): ShiroTrie;
   add(...permissions: Array<string | string[]>): ShiroTrie;
   check(permission: string): boolean;
-  get(): any;
+  get(): ShiroTrieNode;
   permissions(search: string): Array<string>;
 }
 
