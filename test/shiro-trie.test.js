@@ -3,15 +3,6 @@ const shiroTrie = require('../');
 let trie;
 
 describe('shiro-trie node module', () => {
-  describe('basic check of testing library', () => {
-    it('assert that JavaScript is still a little crazy', () => {
-      expect([] + []).toBe('');
-    });
-    it('undefined is not a function', () => {
-      expect(typeof undefined).not.toEqual('function');
-    });
-  });
-
   describe('building permission trie', () => {
     beforeEach(() => {
       trie = shiroTrie.newTrie();
