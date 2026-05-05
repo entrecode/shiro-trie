@@ -39,6 +39,24 @@ account1.permissions('printer:?'); // ['xpc5000', 'xpc4000']
 account1.permissions('nas:$:?'); // ['read']
 ```
 
+## Performance
+
+`0.5.0` ships a rewrite of the matching internals. Representative speedups
+against `0.4.x` on the same workload (Node 24, microbenchmark):
+
+| Operation                              |   Speedup |
+| -------------------------------------- | --------: |
+| `.check()` literal hit / miss          | ~1.5–1.8× |
+| `.check()` with `,` alternates         |       ~7× |
+| `.check()` with deep `*` wildcards     |       ~3× |
+| `.permissions('a:?')`                  |       ~2× |
+| `.permissions('a:?:right')`            |      ~10× |
+| Building a trie from 1 000 permissions |     ~1.7× |
+
+Absolute throughput is hardware-dependent, but the relative gains hold across
+the matching paths. Memory footprint of a populated trie also drops by roughly
+half thanks to shared `LEAF` / `TERMINATOR` sentinels.
+
 ## Defining permissions
 
 See [Understanding Permissions in Apache Shiro](http://shiro.apache.org/permissions.html) for a short introduction to Shiro Syntax. Basically, you can describe a permission hierarchy using `:` as separator.
