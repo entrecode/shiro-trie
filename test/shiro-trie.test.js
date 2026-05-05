@@ -87,6 +87,27 @@ describe('shiro-trie node module', function () {
     it('reset works', function () {
       expect(trie.add('a:b:c').reset().get()).toEqual({});
     });
+    it('non-string/non-array single arg is ignored', function () {
+      trie.add(42);
+      trie.add({ foo: 'bar' });
+      expect(trie.get()).toEqual({});
+    });
+    it('mixed string and array args', function () {
+      trie.add('a:b', ['c:d', 'e:f'], 'g:h');
+      expect(trie.get()).toEqual({
+        a: { b: { '*': {} } },
+        c: { d: { '*': {} } },
+        e: { f: { '*': {} } },
+        g: { h: { '*': {} } },
+      });
+    });
+    it('non-string entries inside an array arg are ignored', function () {
+      trie.add('a:b', [null, 'c:d', 7]);
+      expect(trie.get()).toEqual({
+        a: { b: { '*': {} } },
+        c: { d: { '*': {} } },
+      });
+    });
   });
 
   describe('checking permissions', function () {
@@ -371,42 +392,18 @@ describe('shiro-trie node module', function () {
     it('simple id lookup with any and wrong explicit sub-right at end #2', function () {
       expect(trie.permissions('m:?:$:p:z')).toEqual([]);
     });
+    it('lookup without ? past a known leaf returns empty', function () {
+      var t = shiroTrie.newTrie().add('foo');
+      expect(t.permissions('foo')).toEqual([]);
+    });
+    it('star-only branch is followed when literal is missing', function () {
+      var t = shiroTrie.newTrie().add('*:read');
+      expect(t.permissions('anything:?')).toEqual(['read']);
+    });
+    it('?:$ at end resolves keys whose subtree has a wildcard', function () {
+      var t = shiroTrie.newTrie().add('a:b:*');
+      expect(t.permissions('a:?:$')).toEqual(['b']);
+    });
   });
 
-  describe('expand function', function () {
-    it('test1', function () {
-      expect(shiroTrie._expand('x:a,b')).toEqual(['x:a', 'x:b']);
-    });
-    it('test2', function () {
-      expect(shiroTrie._expand('x,y:a,b')).toEqual(['x:a', 'y:a', 'x:b', 'y:b']);
-    });
-    it('test3', function () {
-      expect(shiroTrie._expand('x:a,b,c')).toEqual(['x:a', 'x:b', 'x:c']);
-    });
-    it('test4', function () {
-      expect(shiroTrie._expand('x:a,b,c:d')).toEqual(['x:a:d', 'x:b:d', 'x:c:d']);
-    });
-    it('test5', function () {
-      expect(shiroTrie._expand('x,y:a,b,c:1,2')).toEqual([
-        'x:a:1',
-        'y:a:1',
-        'x:b:1',
-        'y:b:1',
-        'x:c:1',
-        'y:c:1',
-        'x:a:2',
-        'y:a:2',
-        'x:b:2',
-        'y:b:2',
-        'x:c:2',
-        'y:c:2',
-      ]);
-    });
-    it('test6', function () {
-      expect(shiroTrie._expand('x,y:a')).toEqual(['x:a', 'y:a']);
-    });
-    it('test7', function () {
-      expect(shiroTrie._expand('x:y')).toEqual(['x:y']);
-    });
-  });
 });

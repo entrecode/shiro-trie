@@ -76,8 +76,6 @@ const _add = (trie, array, from) => {
       return trie;
     }
   }
-
-  return trie;
 };
 
 const _check = (node, parts, idx, len) => {
@@ -233,31 +231,6 @@ const _permissions = (trie, parts, idx) => {
   return out;
 };
 
-const _expand = (permission) => {
-  const parts = permission.split(COLON);
-  let results = parts[0].indexOf(COMMA) === -1 ? [parts[0]] : parts[0].split(COMMA);
-  if (parts.length === 1) {
-    return results.length === new Set(results).size ? results : Array.from(new Set(results));
-  }
-  for (let i = 1; i < parts.length; i++) {
-    const alts = parts[i].indexOf(COMMA) === -1 ? [parts[i]] : parts[i].split(COMMA);
-    const next = [];
-    const seen = new Set();
-    for (let a = 0; a < alts.length; a++) {
-      const alt = alts[a];
-      for (let r = 0; r < results.length; r++) {
-        const combined = results[r] + COLON + alt;
-        if (!seen.has(combined)) {
-          seen.add(combined);
-          next.push(combined);
-        }
-      }
-    }
-    results = next;
-  }
-  return results;
-};
-
 const _matches = (trie, parts, idx) => {
   if (idx >= parts.length) return true;
   const head = parts[idx];
@@ -378,5 +351,5 @@ class ShiroTrie {
 
 const newTrie = () => new ShiroTrie();
 
-module.exports = { newTrie, _expand };
-module.exports.default = { newTrie, _expand };
+module.exports = { newTrie };
+module.exports.default = { newTrie };

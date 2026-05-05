@@ -1,4 +1,4 @@
 import shiroTrie from './index.cjs';
 
-export const { newTrie, _expand } = shiroTrie;
+export const { newTrie } = shiroTrie;
 export default shiroTrie;
