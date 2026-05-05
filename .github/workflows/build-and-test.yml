@@ -30,8 +30,7 @@ jobs:
         run: npm run coverage
 
       - name: Upload coverage to Coveralls
-        run: npx coveralls < coverage/lcov.info
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-          COVERALLS_SERVICE_NAME: github
-          COVERALLS_GIT_BRANCH: ${{ github.ref_name }}
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: coverage/lcov.info
