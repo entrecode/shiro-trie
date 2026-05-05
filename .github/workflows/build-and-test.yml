@@ -27,12 +27,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Install Chrome
-      uses: browser-actions/setup-chrome@v1
-
-    - name: Run build
-      run: npm run build
-
     - name: Run tests
       run: npm test
       

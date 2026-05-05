@@ -1,5 +1,3 @@
-'use strict';
-
 // Cache frequently used values
 const STAR = '*';
 const QUESTION = '?';

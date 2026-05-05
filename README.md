@@ -8,31 +8,14 @@ For example, if you have permissions to access resources with id 1 and 2, you ca
 
 ## Install
 
-### node.js
-
 ```sh
 $ npm install --save shiro-trie
 ```
 
-### web / frontend
-
-```sh
-$ bower install --save shiro-trie
-```
-
 ## Getting Started
-
-### node.js
 
 ```js
 var shiroTrie = require('shiro-trie');
-```
-
-### web / frontend
-Using the shiro-trie plugin in your web-app is pretty simple, too. First, you should include the script file to your HTML-file:
-
-```html
-<script type="text/javascript" src="bower_components/shiro-trie/dist/shiro-trie.js" />
 ```
 
 ## Usage

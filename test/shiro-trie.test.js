@@ -1,12 +1,7 @@
-'use strict';
-
-var isNode = typeof process !== 'undefined';
-if (isNode) {
-  var chai = require('chai');
-  var expect = chai.expect;
-  var assert = chai.assert;
-  var shiroTrie = require('../');
-}
+var chai = require('chai');
+var expect = chai.expect;
+var assert = chai.assert;
+var shiroTrie = require('../');
 
 var trie;
 

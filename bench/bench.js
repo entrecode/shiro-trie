@@ -1,5 +1,3 @@
-'use strict';
-
 // Side-by-side benchmark of bench/baseline.js (pre-optimization snapshot of
 // index.js, see plan) against the current ../index.js. Run via:
 //   node bench/bench.js

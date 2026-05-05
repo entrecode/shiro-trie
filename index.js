@@ -1,5 +1,3 @@
-'use strict';
-
 const STAR = '*';
 const QUESTION = '?';
 const DOLLAR = '$';
