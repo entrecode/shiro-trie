@@ -4,7 +4,6 @@
   "description": "Check permissions using Shiro-like strings, put in a trie.",
   "homepage": "https://github.com/entrecode/shiro-trie",
   "main": "./index.cjs",
-  "module": "./index.mjs",
   "types": "./index.d.ts",
   "exports": {
     ".": {
