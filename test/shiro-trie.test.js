@@ -26,8 +26,8 @@ describe('shiro-trie node module', function () {
       expect(trie.get()).toEqual({
         a: {
           b: { c: { d: { '*': {} } } },
-          c: { c: { d: { '*': {} } } }
-        }
+          c: { c: { d: { '*': {} } } },
+        },
       });
     });
     it('two permissions as args', function () {
@@ -35,8 +35,8 @@ describe('shiro-trie node module', function () {
       expect(trie.get()).toEqual({
         a: {
           b: { c: { d: { '*': {} } } },
-          c: { c: { d: { '*': {} } } }
-        }
+          c: { c: { d: { '*': {} } } },
+        },
       });
     });
     it('two permissions as array', function () {
@@ -44,8 +44,8 @@ describe('shiro-trie node module', function () {
       expect(trie.get()).toEqual({
         a: {
           b: { c: { d: { '*': {} } } },
-          c: { c: { d: { '*': {} } } }
-        }
+          c: { c: { d: { '*': {} } } },
+        },
       });
     });
     it('non-strings get ignored', function () {
@@ -58,8 +58,8 @@ describe('shiro-trie node module', function () {
       expect(trie.get()).toEqual({
         a: {
           b: { d: { '*': {} } },
-          c: { d: { '*': {} } }
-        }
+          c: { d: { '*': {} } },
+        },
       });
     });
     it('multiple comma-separated permissions', function () {
@@ -69,19 +69,19 @@ describe('shiro-trie node module', function () {
           b: {
             e: { '*': {} },
             f: { '*': {} },
-            g: { '*': {} }
+            g: { '*': {} },
           },
           c: {
             e: { '*': {} },
             f: { '*': {} },
-            g: { '*': {} }
+            g: { '*': {} },
           },
           d: {
             e: { '*': {} },
             f: { '*': {} },
-            g: { '*': {} }
-          }
-        }
+            g: { '*': {} },
+          },
+        },
       });
     });
     it('reset works', function () {
@@ -135,7 +135,6 @@ describe('shiro-trie node module', function () {
   });
 
   describe('more complex wildcard permissions', function () {
-
     it('test0', function () {
       expect(shiroTrie.newTrie().add('*').check('l1:l2:l3:l4:l5')).toBe(true);
     });
@@ -251,7 +250,9 @@ describe('shiro-trie node module', function () {
       expect(shiroTrie.newTrie().add('*:*:l3').check('l1:l2:error:l4')).toBe(false);
     });
     it('test20', function () {
-      expect(shiroTrie.newTrie().add('newsletter:view,create,edit,delete').check('newsletter:view,create,any,edit,delete')).toBe(false);
+      expect(
+        shiroTrie.newTrie().add('newsletter:view,create,edit,delete').check('newsletter:view,create,any,edit,delete'),
+      ).toBe(false);
     });
     it('test21', function () {
       expect(shiroTrie.newTrie().add('acc:perm:*').check('acc:perm:x:y:z,1,2')).toBe(true);
@@ -269,39 +270,20 @@ describe('shiro-trie node module', function () {
       expect(shiroTrie.newTrie().add('acc:perm:x:y:z').check('acc:perm:x:*:z')).toBe(false);
     });
     it('test26 (no overwrite when adding comma after star)', function () {
-      expect(shiroTrie.newTrie()
-      .add('a:b:c:d,e')
-      .add('a:b:*:d')
-      .check('a:b:c:e')).toBe(true);
+      expect(shiroTrie.newTrie().add('a:b:c:d,e').add('a:b:*:d').check('a:b:c:e')).toBe(true);
     });
     it('test27 (no overwrite when adding something after star)', function () {
-      expect(shiroTrie.newTrie()
-      .add('a:b')
-      .add('a:b:c:d')
-      .check('a:b:c:e')).toBe(true);
+      expect(shiroTrie.newTrie().add('a:b').add('a:b:c:d').check('a:b:c:e')).toBe(true);
     });
-    it('test28 (star at end trumps all, more mighty permission first)', function() {
-      var trie = shiroTrie
-        .newTrie()
-        .add('a:b')
-        .add('a:b:*:d');
+    it('test28 (star at end trumps all, more mighty permission first)', function () {
+      var trie = shiroTrie.newTrie().add('a:b').add('a:b:*:d');
       expect(trie.check('a:b:c:e')).toBe(true);
     });
-    it('test29 (star at end trumps all, more mighty permission last)', function() {
-      expect(
-        shiroTrie
-          .newTrie()
-          .add(['a:b:*:d', 'a:b'])
-          .check('a:b:c:e')
-      ).toBe(true);
+    it('test29 (star at end trumps all, more mighty permission last)', function () {
+      expect(shiroTrie.newTrie().add(['a:b:*:d', 'a:b']).check('a:b:c:e')).toBe(true);
     });
-    it('test30 (multiple *:x permissions dont give *:*)', function() {
-      expect(
-        shiroTrie
-          .newTrie()
-          .add(['a:b:*:d', 'a:b:*:e'])
-          .check('a:b:c:f')
-      ).toBe(false);
+    it('test30 (multiple *:x permissions dont give *:*)', function () {
+      expect(shiroTrie.newTrie().add(['a:b:*:d', 'a:b:*:e']).check('a:b:c:f')).toBe(false);
     });
     it('test31 (order of permissions is irrelevant)', function () {
       var trie1 = shiroTrie.newTrie().add(['a:*', '*:*:d']);
@@ -405,7 +387,20 @@ describe('shiro-trie node module', function () {
       expect(shiroTrie._expand('x:a,b,c:d')).toEqual(['x:a:d', 'x:b:d', 'x:c:d']);
     });
     it('test5', function () {
-      expect(shiroTrie._expand('x,y:a,b,c:1,2')).toEqual(['x:a:1', 'y:a:1', 'x:b:1', 'y:b:1', 'x:c:1', 'y:c:1', 'x:a:2', 'y:a:2', 'x:b:2', 'y:b:2', 'x:c:2', 'y:c:2']);
+      expect(shiroTrie._expand('x,y:a,b,c:1,2')).toEqual([
+        'x:a:1',
+        'y:a:1',
+        'x:b:1',
+        'y:b:1',
+        'x:c:1',
+        'y:c:1',
+        'x:a:2',
+        'y:a:2',
+        'x:b:2',
+        'y:b:2',
+        'x:c:2',
+        'y:c:2',
+      ]);
     });
     it('test6', function () {
       expect(shiroTrie._expand('x,y:a')).toEqual(['x:a', 'y:a']);
@@ -414,5 +409,4 @@ describe('shiro-trie node module', function () {
       expect(shiroTrie._expand('x:y')).toEqual(['x:y']);
     });
   });
-
 });

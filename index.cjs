@@ -112,7 +112,10 @@ const _checkExpanded = (data, string) => {
   for (let i = 0; i < len; i++) {
     if (segments[i].indexOf(COMMA) !== -1) {
       if (firstMultiIdx === -1) firstMultiIdx = i;
-      else { secondMultiIdx = i; break; }
+      else {
+        secondMultiIdx = i;
+        break;
+      }
     }
   }
 
@@ -171,9 +174,15 @@ const _permissions = (trie, parts, idx) => {
       if (tail === DOLLAR) {
         for (let i = 0; i < keys.length; i++) {
           const sub = trie[keys[i]];
-          if (sub[STAR] !== undefined) { out.push(keys[i]); continue; }
+          if (sub[STAR] !== undefined) {
+            out.push(keys[i]);
+            continue;
+          }
           for (const k in sub) {
-            if (k !== STAR) { out.push(keys[i]); break; }
+            if (k !== STAR) {
+              out.push(keys[i]);
+              break;
+            }
           }
         }
       } else {

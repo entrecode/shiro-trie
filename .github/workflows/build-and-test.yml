@@ -2,36 +2,36 @@ name: Build and Test
 
 on:
   push:
-    branches: [ main, master, develop, feature/modernize ]
+    branches: [main, master, develop, feature/modernize]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 24.x
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run tests
-      run: npm test
+      - name: Run tests
+        run: npm test
 
-    - name: Generate coverage report
-      run: npm run coverage
+      - name: Generate coverage report
+        run: npm run coverage
 
-    - name: Upload coverage to Coveralls
-      run: npx coveralls < coverage/lcov.info
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        COVERALLS_SERVICE_NAME: github
-        COVERALLS_GIT_BRANCH: ${{ github.ref_name }}
+      - name: Upload coverage to Coveralls
+        run: npx coveralls < coverage/lcov.info
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_SERVICE_NAME: github
+          COVERALLS_GIT_BRANCH: ${{ github.ref_name }}

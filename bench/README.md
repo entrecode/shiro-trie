@@ -10,28 +10,28 @@ node --expose-gc bench/bench.js       # adds the heap-delta line
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `baseline.js` | Frozen copy of pre-optimization `index.js`. Required by `bench.js`; do not edit. |
-| `bench.js` | Loads `baseline.js` and `../index.js`, runs the same workload against both, prints a comparison table. |
+| File          | Purpose                                                                                                |
+| ------------- | ------------------------------------------------------------------------------------------------------ |
+| `baseline.js` | Frozen copy of pre-optimization `index.js`. Required by `bench.js`; do not edit.                       |
+| `bench.js`    | Loads `baseline.js` and `../index.js`, runs the same workload against both, prints a comparison table. |
 
 ## Final results
 
 Workload: 1000 `user:N:read,write,delete` permissions plus a handful of
 wildcards (`admin:*`, `m:n:*:p:q`, `a:b,c,d:e,f,g`, `product:1,2,3,4,5:view,edit`).
 
-| Benchmark | Baseline | Optimized | Δ |
-|---|---|---|---|
-| `check` hit | 105 ns/op | 63 ns/op | **+62%** |
-| `check` miss | 86 ns/op | 60 ns/op | **+44%** |
-| `check` wildcard hit | 71 ns/op | 50 ns/op | **+45%** |
-| `check` comma | 1064 ns/op | 149 ns/op | **+614%** |
-| `check` deep wildcard | 350 ns/op | 115 ns/op | **+204%** |
-| `permissions('user:?')` | 14.5 µs | 6.6 µs | **+120%** |
-| `permissions('user:?:write')` | 144 µs | 13 µs | **+1025%** |
-| `permissions('$:$:?')` | 124 µs | 47 µs | **+165%** |
-| Build 1000 perms | 0.85 ms | 0.51 ms | **+68%** |
-| **Heap per trie** | **396 KB** | **66 KB** | **−83%** |
+| Benchmark                     | Baseline   | Optimized | Δ          |
+| ----------------------------- | ---------- | --------- | ---------- |
+| `check` hit                   | 105 ns/op  | 63 ns/op  | **+62%**   |
+| `check` miss                  | 86 ns/op   | 60 ns/op  | **+44%**   |
+| `check` wildcard hit          | 71 ns/op   | 50 ns/op  | **+45%**   |
+| `check` comma                 | 1064 ns/op | 149 ns/op | **+614%**  |
+| `check` deep wildcard         | 350 ns/op  | 115 ns/op | **+204%**  |
+| `permissions('user:?')`       | 14.5 µs    | 6.6 µs    | **+120%**  |
+| `permissions('user:?:write')` | 144 µs     | 13 µs     | **+1025%** |
+| `permissions('$:$:?')`        | 124 µs     | 47 µs     | **+165%**  |
+| Build 1000 perms              | 0.85 ms    | 0.51 ms   | **+68%**   |
+| **Heap per trie**             | **396 KB** | **66 KB** | **−83%**   |
 
 Public API is unchanged. All 90 tests pass.
 
@@ -82,7 +82,7 @@ Net memory: 396 KB → 66 KB per trie (−83%).
     recursion with a single `idx` parameter.
 11. **`Object.keys` instead of `for-in`** for the `?` and `$` enumerations.
     Native intrinsic beats interpreter for many-key nodes (1000 children).
-12. **Zero-copy bubble-up.** When only `literal` *or* only `*` contributes,
+12. **Zero-copy bubble-up.** When only `literal` _or_ only `*` contributes,
     return the recursive result directly instead of allocating a new merged
     array.
 13. **Linear-scan dedup in the `$` branch.** The unique result list is
@@ -94,7 +94,7 @@ Net memory: 396 KB → 66 KB per trie (−83%).
     149 µs → 13 µs.
 15. **Inlined fast path for `?:tail`.** When exactly one token follows the
     `?`, skip the `_matches` call entirely and check `sub[STAR] !== undefined
-    || sub[tail] !== undefined` directly. Cuts function-call overhead on each
+|| sub[tail] !== undefined` directly. Cuts function-call overhead on each
     of potentially thousands of children.
 
 ### `add(...)`
@@ -108,15 +108,15 @@ Net memory: 396 KB → 66 KB per trie (−83%).
 
 ## Things tried and rejected
 
-| Change | Why |
-|---|---|
-| `Object.create(null)` for trie nodes | V8 dictionary-mode penalty regresses `check` 10-20%. Plain `{}` keeps fast hidden classes. |
-| `for-in + push` instead of `Object.keys` for `?` enumeration | 40% slower on 1000-key nodes. `Object.keys` is a JIT intrinsic. |
-| `node === TERMINATOR` shortcut at top of `_check` loop | Adds one cmp per iteration. Net neutral; the `node[STAR] === LEAF` check at the next iteration catches the same case. |
-| Subtree-collapse on wildcard add (`add('a:b:c').add('a:b')` drops `c`) | Changes observable `permissions('a:b:c')` from `['*']` to `[]`. |
-| Manual char-by-char split | V8's `String#split` is faster. |
-| `Map` for wide nodes | More memory and slower lookup than plain-object hidden-class chain. |
-| Bloom filter for misses | Miss case is already 60 ns; a Bloom check is ~20-30 ns alone. No margin. |
+| Change                                                                 | Why                                                                                                                   |
+| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `Object.create(null)` for trie nodes                                   | V8 dictionary-mode penalty regresses `check` 10-20%. Plain `{}` keeps fast hidden classes.                            |
+| `for-in + push` instead of `Object.keys` for `?` enumeration           | 40% slower on 1000-key nodes. `Object.keys` is a JIT intrinsic.                                                       |
+| `node === TERMINATOR` shortcut at top of `_check` loop                 | Adds one cmp per iteration. Net neutral; the `node[STAR] === LEAF` check at the next iteration catches the same case. |
+| Subtree-collapse on wildcard add (`add('a:b:c').add('a:b')` drops `c`) | Changes observable `permissions('a:b:c')` from `['*']` to `[]`.                                                       |
+| Manual char-by-char split                                              | V8's `String#split` is faster.                                                                                        |
+| `Map` for wide nodes                                                   | More memory and slower lookup than plain-object hidden-class chain.                                                   |
+| Bloom filter for misses                                                | Miss case is already 60 ns; a Bloom check is ~20-30 ns alone. No margin.                                              |
 
 ## What still costs perf — and would need API changes
 

@@ -62,12 +62,16 @@ function measureHeapDelta(factory) {
 
 function pct(opt, base) {
   if (base === 0) return '—';
-  const delta = (opt - base) / base * 100;
+  const delta = ((opt - base) / base) * 100;
   return (delta >= 0 ? '+' : '') + delta.toFixed(1) + '%';
 }
 
-function fmtOps(o) { return (o / 1e6).toFixed(2) + ' M ops/s'; }
-function fmtNs(n) { return n.toFixed(0) + ' ns'; }
+function fmtOps(o) {
+  return (o / 1e6).toFixed(2) + ' M ops/s';
+}
+function fmtNs(n) {
+  return n.toFixed(0) + ' ns';
+}
 
 function runFor(label, lib) {
   const trie = buildTrie(lib);
@@ -90,7 +94,20 @@ function runFor(label, lib) {
   const memBytes = approxRetainedBytes(memTrie.get(), new Set());
   const memHeapBytes = measureHeapDelta(lib);
 
-  return { label, checkHit, checkMiss, checkWildcard, checkComma, checkDeep, permId, permSub, permAny, build, memBytes, memHeapBytes };
+  return {
+    label,
+    checkHit,
+    checkMiss,
+    checkWildcard,
+    checkComma,
+    checkDeep,
+    permId,
+    permSub,
+    permAny,
+    build,
+    memBytes,
+    memHeapBytes,
+  };
 }
 
 function diffRow(name, base, opt, kind) {
@@ -115,14 +132,14 @@ const optR = runFor('optimized', optimized);
 console.log('');
 console.log('| Benchmark | Baseline (develop) | Optimized | Δ |');
 console.log('|---|---|---|---|');
-console.log(diffRow('check hit',           baseR.checkHit,      optR.checkHit,      'ops'));
-console.log(diffRow('check miss',          baseR.checkMiss,     optR.checkMiss,     'ops'));
-console.log(diffRow('check wildcard hit',  baseR.checkWildcard, optR.checkWildcard, 'ops'));
-console.log(diffRow('check comma',         baseR.checkComma,    optR.checkComma,    'ops'));
-console.log(diffRow('check deep wildcard', baseR.checkDeep,     optR.checkDeep,     'ops'));
-console.log(diffRow('permissions user:?',          baseR.permId,  optR.permId,  'ops'));
-console.log(diffRow('permissions user:?:write',    baseR.permSub, optR.permSub, 'ops'));
-console.log(diffRow('permissions $:$:?',           baseR.permAny, optR.permAny, 'ops'));
-console.log(diffRow('build 1000 perms',    baseR.build,         optR.build,         'build'));
+console.log(diffRow('check hit', baseR.checkHit, optR.checkHit, 'ops'));
+console.log(diffRow('check miss', baseR.checkMiss, optR.checkMiss, 'ops'));
+console.log(diffRow('check wildcard hit', baseR.checkWildcard, optR.checkWildcard, 'ops'));
+console.log(diffRow('check comma', baseR.checkComma, optR.checkComma, 'ops'));
+console.log(diffRow('check deep wildcard', baseR.checkDeep, optR.checkDeep, 'ops'));
+console.log(diffRow('permissions user:?', baseR.permId, optR.permId, 'ops'));
+console.log(diffRow('permissions user:?:write', baseR.permSub, optR.permSub, 'ops'));
+console.log(diffRow('permissions $:$:?', baseR.permAny, optR.permAny, 'ops'));
+console.log(diffRow('build 1000 perms', baseR.build, optR.build, 'build'));
 console.log(diffRow('retained trie size (walk approx)', baseR.memBytes, optR.memBytes, 'mem'));
-console.log(diffRow('retained trie size (heap delta)',  baseR.memHeapBytes, optR.memHeapBytes, 'mem'));
+console.log(diffRow('retained trie size (heap delta)', baseR.memHeapBytes, optR.memHeapBytes, 'mem'));

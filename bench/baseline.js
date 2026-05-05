@@ -33,34 +33,34 @@ const hasWildcardAccess = (node) => {
 const _add = (trie, array) => {
   // Normalize the permission array to remove redundant wildcards
   const normalizedArray = normalizePermission(array);
-  
+
   // If the normalized array is empty, we have a root wildcard
   if (normalizedArray.length === 0) {
     trie[STAR] = {};
     return trie;
   }
-  
+
   let node = trie;
   let goRecursive = false;
-  
+
   // go through permission string array
   for (let i = 0; i < normalizedArray.length; i++) {
     // split by comma - cache the split result
     const values = normalizedArray[i].includes(COMMA) ? normalizedArray[i].split(COMMA) : [normalizedArray[i]];
     const valuesLength = values.length;
-    
+
     // default: only once (no comma separation)
     for (let j = 0; j < valuesLength; j++) {
       const value = values[j];
-      
+
       // permission is new -> create
       if (!(value in node)) {
         node[value] = {};
-      } else if (hasWildcardAccess(node[value])) { 
+      } else if (hasWildcardAccess(node[value])) {
         // If this node already has wildcard access, no need to add more
         return trie;
       }
-      
+
       if (valuesLength > 1) {
         // if we have a comma separated permission list, we have to go recursive
         // save the remaining permission array (subTrie has to be appended to each one)
@@ -75,27 +75,27 @@ const _add = (trie, array) => {
       }
     }
   }
-  
+
   // if we did not went recursive, we close the Trie with a * leaf
   if (!goRecursive) {
     node[STAR] = {};
   }
-  
+
   return trie;
 };
 
 const _check = (trie, array) => {
   let node = trie;
-  
+
   // add implicit star at the end
   if (array.length < 1 || array[array.length - 1] !== STAR) {
     array.push(STAR);
   }
-  
+
   // we iterate one step beyond the length of the array to check for wildcard access at the end
   for (let i = 0; i <= array.length; i++) {
     const current = array[i];
-    
+
     // If we find a wildcard with empty subtree at this level, we're done
     // This means we have permission for everything at this level and below
     if (hasWildcardAccess(node)) {
@@ -117,22 +117,20 @@ const _check = (trie, array) => {
 };
 
 const _permissions = (trie, array) => {
-  if (!trie || !array ||
-    typeof trie !== 'object' || !Array.isArray(array) ||
-    isEmpty(trie) || array.length < 1) {
+  if (!trie || !array || typeof trie !== 'object' || !Array.isArray(array) || isEmpty(trie) || array.length < 1) {
     // for recursion safety, we make sure we have really valid values
     return EMPTY_ARRAY;
   }
-  
+
   // if we have a star permission with nothing further down the trie we can just return that
   if (hasWildcardAccess(trie)) {
     return [STAR];
   }
-  
+
   array = [].concat(array);
   // take first element from array
   const current = array.shift();
-  
+
   // the requested part
   if (current === QUESTION) {
     const results = getKeys(trie);
@@ -147,9 +145,10 @@ const _permissions = (trie, array) => {
     }
     return results;
   }
-  
+
   // if we have an 'any' flag, we have to go recursive for all alternatives
-  if (current === DOLLAR) { // $ before ?
+  if (current === DOLLAR) {
+    // $ before ?
     const results = [];
     getKeys(trie).forEach((node) => {
       results.push(..._permissions(trie[node], [].concat(array)));
@@ -164,7 +163,7 @@ const _permissions = (trie, array) => {
     }
     return u;
   }
-  
+
   const results = [];
   if (current in trie) {
     // we have to go deeper!
@@ -180,7 +179,7 @@ const _permissions = (trie, array) => {
 const _expand = (permission) => {
   const results = [];
   const parts = permission.split(COLON);
-  
+
   for (let i = 0; i < parts.length; i++) {
     const alternatives = parts[i].includes(COMMA) ? parts[i].split(COMMA) : [parts[i]];
     if (results.length === 0) {
@@ -203,27 +202,29 @@ const _expand = (permission) => {
 const _expandTrie = (trie, array) => {
   const a = [...array];
 
-  return getKeys(trie).map((node) => {
-    let recurse = false;
-    if (node === STAR) {
-      if (array.length <= 1 || isEmpty(trie[node])) {
-        return [node];
+  return getKeys(trie)
+    .map((node) => {
+      let recurse = false;
+      if (node === STAR) {
+        if (array.length <= 1 || isEmpty(trie[node])) {
+          return [node];
+        }
+        recurse = true;
       }
-      recurse = true;
-    }
-    if (node === STAR || array[0] === node || array[0] === DOLLAR) {
-      if (array.length <= 1) {
-        return [node];
+      if (node === STAR || array[0] === node || array[0] === DOLLAR) {
+        if (array.length <= 1) {
+          return [node];
+        }
+        recurse = true;
       }
-      recurse = true;
-    }
 
-    if (!recurse) {
-      return EMPTY_ARRAY;
-    }
-    const child = _expandTrie(trie[node], array.slice(1));
-    return child.map((inner) => node + COLON + inner);
-  }).reduce((a, b) => a.concat(b), EMPTY_ARRAY);
+      if (!recurse) {
+        return EMPTY_ARRAY;
+      }
+      const child = _expandTrie(trie[node], array.slice(1));
+      return child.map((inner) => node + COLON + inner);
+    })
+    .reduce((a, b) => a.concat(b), EMPTY_ARRAY);
 };
 
 /**
@@ -252,7 +253,7 @@ class ShiroTrie {
    */
   add(...args) {
     const flatArgs = [].concat(...args);
-    
+
     for (const arg of flatArgs) {
       if (typeof arg === 'string') {
         const array = arg.split(COLON);
@@ -273,18 +274,19 @@ class ShiroTrie {
     if (typeof string !== 'string') {
       return false;
     }
-    
+
     // Early check: if the trie has a root wildcard, everything is allowed
     if (hasWildcardAccess(this.data)) {
       return true;
     }
-    
-    if (string.includes(COMMA)) { // expand string to single comma-less permissions...
-      return _expand(string).map((permission) => 
-        _check(this.data, permission.split(COLON))
-      ).every(Boolean); // ... and make sure they are all allowed
+
+    if (string.includes(COMMA)) {
+      // expand string to single comma-less permissions...
+      return _expand(string)
+        .map((permission) => _check(this.data, permission.split(COLON)))
+        .every(Boolean); // ... and make sure they are all allowed
     }
-    
+
     return _check(this.data, string.split(COLON));
   }
 

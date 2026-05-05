@@ -1,4 +1,4 @@
-#  [![NPM version][npm-image]][npm-url] [![Build Status][github-actions-image]][github-actions-url] [![Coverage][coveralls-image]][coveralls-url]
+# [![NPM version][npm-image]][npm-url] [![Build Status][github-actions-image]][github-actions-url] [![Coverage][coveralls-image]][coveralls-url]
 
 > Check permissions using Shiro-like strings, put in a trie.
 
@@ -30,11 +30,7 @@ import { newTrie } from 'shiro-trie';
 
 const account1 = newTrie();
 
-account1.add([
-  'printer:xpc5000:print',
-  'printer:xpc4000:*',
-  'nas:timeCapsule,fritzbox:read'
-]);
+account1.add(['printer:xpc5000:print', 'printer:xpc4000:*', 'nas:timeCapsule,fritzbox:read']);
 
 account1.check('printer:xpc4000:configure'); // true
 account1.check('nas:timeCapsule:write'); // false
@@ -43,21 +39,19 @@ account1.permissions('printer:?'); // ['xpc5000', 'xpc4000']
 account1.permissions('nas:$:?'); // ['read']
 ```
 
-
 ## Defining permissions
 
-See [Understanding Permissions in Apache Shiro](http://shiro.apache.org/permissions.html) for a short introduction to Shiro Syntax. Basically, you can describe a permission hierarchy using `:` as separator. 
+See [Understanding Permissions in Apache Shiro](http://shiro.apache.org/permissions.html) for a short introduction to Shiro Syntax. Basically, you can describe a permission hierarchy using `:` as separator.
 Example:
 
 `printer:xpc5000:print`
 
-
 You may define multiple alternatives for a level using `,` as separator.
-For example: 
+For example:
 
 `nas:timeCapsule,fritzbox:read` is the same as `nas:timeCapsule:read` plus `nas:fritzbox:read`.
 
-You may also use the wildcard character `*` to grant *all* permissions:
+You may also use the wildcard character `*` to grant _all_ permissions:
 
 `printer:*:print` grants printing on any printer.
 
@@ -68,7 +62,7 @@ Example:
 
 The function for adding one or multiple permissions is `.add(…)`. You may set one string, a list of strings or array(s) of strings. It returns the same ShiroTrie instance for chainability.
 
-*Note that `?` is* ***no*** *special character for single-character-wildcard, as opposed to some other Shiro libraries.*
+_Note that `?` is_ **_no_** _special character for single-character-wildcard, as opposed to some other Shiro libraries._
 
 ## Checking permissions
 
@@ -129,18 +123,14 @@ Adds a new permission. Multiple permission strings can be added at once, either 
 Permission strings may contain special characters `:`, `*`, `,` but not `$` or `?`.
 
 ```js
-account1.add([
-  'printer:xpc5000:print',
-  'printer:xpc4000:*',
-  'nas:timeCapsule,fritzbox:read'
-]);
+account1.add(['printer:xpc5000:print', 'printer:xpc4000:*', 'nas:timeCapsule,fritzbox:read']);
 ```
 
 #### check(string)
 
 Checks if a single permission is allowed. No special characters apart from `:`, `,` and `*` are allowed.
 If the permission string contains `,` characters, all variants are tested and the result is only true if all permissions are allowed.
-Returns *Boolean.*
+Returns _Boolean._
 
 ```js
 account1.check('printer:xpc4000:configure'); // true
@@ -150,8 +140,8 @@ account1.check('nas:timeCapsule:write'); // false
 #### permissions(string)
 
 Retrieves a list of available permissions at a certain position in the permission Trie.
-Expects a permission string containing `?`. Additionally, the *any* operator `$` can be used.
-Returns *Array.*
+Expects a permission string containing `?`. Additionally, the _any_ operator `$` can be used.
+Returns _Array._
 
 ```js
 account1.permissions('printer:?'); // ['xpc5000', 'xpc4000']
@@ -170,9 +160,9 @@ Tests can be executed with [Mocha](http://mochajs.org/):
 $ mocha -R spec
 ```
 
-Current Test Coverage: 
+Current Test Coverage:
 
-[![Coverage][coveralls-image]][coveralls-url] 
+[![Coverage][coveralls-image]][coveralls-url]
 
 It can be checked with [istanbul](http://gotwarlost.github.io/istanbul/):
 
@@ -187,10 +177,10 @@ $ istanbul cover _mocha -- -R spec
 ## Changelog
 
 see [CHANGELOG.md](./CHANGELOG.md)
+
 ## License
 
 MIT © [entrecode GmbH](https://entrecode.de)
-
 
 [npm-image]: https://badge.fury.io/js/shiro-trie.svg
 [npm-url]: https://npmjs.org/package/shiro-trie
