@@ -20,15 +20,19 @@
     "permissions"
   ],
   "devDependencies": {
-    "chai": "^4.3.10",
     "conventional-changelog-cli": "^2.1.1",
-    "coveralls": "3.1.1",
-    "mocha": "11.7.1",
-    "nyc": "^17.1.0"
+    "coveralls-next": "^4.2.1",
+    "jest": "^29.7.0"
   },
   "scripts": {
-    "test": "mocha -R dot ./test/*",
-    "coverage": "nyc --reporter=lcov --reporter=html mocha -R dot ./test/*",
+    "test": "jest",
+    "coverage": "jest --coverage",
     "changelog": "conventional-changelog -i CHANGELOG.md -s"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "index.js"
+    ]
   }
 }
