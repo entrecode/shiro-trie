@@ -47,7 +47,8 @@
     "coverage": "jest --coverage",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "changelog": "conventional-changelog -i CHANGELOG.md -s"
+    "changelog": "conventional-changelog -i CHANGELOG.md -s",
+    "prepublishOnly": "npm run format:check && npm test"
   },
   "jest": {
     "testEnvironment": "node",
