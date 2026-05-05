@@ -103,15 +103,19 @@ The function for checking available permissions is `.permissions(string)`. It re
 ### Initialization
 
 ```js
-var shiroTrie = require('shiro-trie');
+// ES modules
+import { newTrie } from 'shiro-trie';
+
+// CommonJS
+const { newTrie } = require('shiro-trie');
 ```
 
-#### shiroTrie.newTrie(); / shiroTrie.new();
+#### newTrie()
 
 Returns a new ShiroTrie instance.
 
 ```js
-var account1 = shiroTrie.newTrie();
+const account1 = newTrie();
 ```
 
 ### Instance methods
@@ -154,25 +158,32 @@ Empties the Trie and returns it. New permissions can be added using `add(…)` a
 
 ## Tests
 
-Tests can be executed with [Mocha](http://mochajs.org/):
+Tests run on [Jest](https://jestjs.io/):
 
 ```sh
-$ mocha -R spec
+$ npm test
 ```
 
-Current Test Coverage:
+Coverage (uses Jest's built-in Istanbul integration):
+
+```sh
+$ npm run coverage
+```
 
 [![Coverage][coveralls-image]][coveralls-url]
 
-It can be checked with [istanbul](http://gotwarlost.github.io/istanbul/):
+## Code style
+
+The repo is formatted with [Prettier](https://prettier.io/):
 
 ```sh
-$ istanbul cover _mocha -- -R spec
+$ npm run format        # write
+$ npm run format:check  # CI-style check
 ```
 
 ## Known issues
 
-- `add(…)` and `permissions(…)` and one case in `_check` is implemented recursive which is probably not ideal
+- `permissions(…)` and one branch of `_check` (the ambiguous literal-vs-wildcard case) are still recursive.
 
 ## Changelog
 
