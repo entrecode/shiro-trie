@@ -197,5 +197,5 @@ MIT © [entrecode GmbH](https://entrecode.de)
 [npm-url]: https://npmjs.org/package/shiro-trie
 [github-actions-image]: https://github.com/entrecode/shiro-trie/workflows/Build%20and%20Test/badge.svg
 [github-actions-url]: https://github.com/entrecode/shiro-trie/actions
-[coveralls-image]: https://coveralls.io/repos/entrecode/shiro-trie/badge.svg?branch=master&service=github
-[coveralls-url]: https://coveralls.io/github/entrecode/shiro-trie?branch=master
+[coveralls-image]: https://coveralls.io/repos/entrecode/shiro-trie/badge.svg?service=github
+[coveralls-url]: https://coveralls.io/github/entrecode/shiro-trie
