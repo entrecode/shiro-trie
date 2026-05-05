@@ -15,15 +15,20 @@ $ npm install --save shiro-trie
 ## Getting Started
 
 ```js
-var shiroTrie = require('shiro-trie');
+// ES modules
+import { newTrie } from 'shiro-trie';
+// or: import shiroTrie from 'shiro-trie';
+
+// CommonJS
+const { newTrie } = require('shiro-trie');
 ```
 
 ## Usage
 
 ```js
-var shiroTrie = require('shiro-trie');
+import { newTrie } from 'shiro-trie';
 
-var account1 = shiroTrie.newTrie();
+const account1 = newTrie();
 
 account1.add([
   'printer:xpc5000:print',

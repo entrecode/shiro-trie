@@ -367,7 +367,7 @@ class ShiroTrie {
   }
 }
 
-module.exports = {
-  newTrie: () => new ShiroTrie(),
-  _expand,
-};
+const newTrie = () => new ShiroTrie();
+
+module.exports = { newTrie, _expand };
+module.exports.default = { newTrie, _expand };
