@@ -1,3 +1,69 @@
+## 1.0.0 (2026-05-21)
+
+* feat!: bump to 1.0.0 ([01e737f](https://github.com/entrecode/shiro-trie/commit/01e737f))
+* frontend build ([28d664d](https://github.com/entrecode/shiro-trie/commit/28d664d))
+* frontend build ([435dc16](https://github.com/entrecode/shiro-trie/commit/435dc16))
+* new frontend build ([3226652](https://github.com/entrecode/shiro-trie/commit/3226652))
+* docs: document the 0.5.0 performance rewrite in the README ([4f668c4](https://github.com/entrecode/shiro-trie/commit/4f668c4))
+* docs: drop branch=master pin from coveralls badge ([7f0e149](https://github.com/entrecode/shiro-trie/commit/7f0e149))
+* docs: refresh CHANGELOG with the latest 0.5.0 commits ([328dcdf](https://github.com/entrecode/shiro-trie/commit/328dcdf))
+* docs: refresh README to match current toolchain ([1caaab7](https://github.com/entrecode/shiro-trie/commit/1caaab7))
+* docs: regenerate CHANGELOG for 0.5.0 ([cf1d386](https://github.com/entrecode/shiro-trie/commit/cf1d386))
+* docs: update CHANGELOG for 0.5.0 release with new features and enhancements ([4acc2d7](https://github.com/entrecode/shiro-trie/commit/4acc2d7))
+* feat: add legacy 'new' alias for newTrie function and update type definitions ([50c18d7](https://github.com/entrecode/shiro-trie/commit/50c18d7))
+* feat: enhance permission handling in ShiroTrie by normalizing and compressing wildcard paths ([2b080ab](https://github.com/entrecode/shiro-trie/commit/2b080ab))
+* feat: publish dual ESM/CJS package ([d5d60cc](https://github.com/entrecode/shiro-trie/commit/d5d60cc))
+* types: replace get(): any with a recursive ShiroTrieNode ([8d9d3d1](https://github.com/entrecode/shiro-trie/commit/8d9d3d1))
+* chore: add build step to GitHub Actions workflow ([b5ad085](https://github.com/entrecode/shiro-trie/commit/b5ad085))
+* chore: add prettier and apply to repo ([c19b4b4](https://github.com/entrecode/shiro-trie/commit/c19b4b4))
+* chore: adds gh action build ([8c8cb04](https://github.com/entrecode/shiro-trie/commit/8c8cb04))
+* chore: bump dev dependencies to latest ([430cea1](https://github.com/entrecode/shiro-trie/commit/430cea1))
+* chore: bump to 0.5.0 ([7953fd1](https://github.com/entrecode/shiro-trie/commit/7953fd1))
+* chore: declare node >=18 engine ([cf6b3ed](https://github.com/entrecode/shiro-trie/commit/cf6b3ed))
+* chore: drop Bower, Browserify, and Karma browser test pipeline ([38379d9](https://github.com/entrecode/shiro-trie/commit/38379d9))
+* chore: drop legacy module field from package.json ([8e6d945](https://github.com/entrecode/shiro-trie/commit/8e6d945))
+* chore: fix vscode launch config to call npm test ([7575876](https://github.com/entrecode/shiro-trie/commit/7575876))
+* chore: gate npm publish on tests and prettier check ([15b91db](https://github.com/entrecode/shiro-trie/commit/15b91db))
+* chore: refactor index.js to use modern JavaScript syntax ([ad9a994](https://github.com/entrecode/shiro-trie/commit/ad9a994))
+* chore: remove bench/ snapshot harness ([524fa0b](https://github.com/entrecode/shiro-trie/commit/524fa0b))
+* chore: rename workflow file ([f8e6348](https://github.com/entrecode/shiro-trie/commit/f8e6348))
+* chore: switch jest progress to dot reporter ([bb1d93e](https://github.com/entrecode/shiro-trie/commit/bb1d93e))
+* chore: switch to jest and coveralls-next ([c1bcfcb](https://github.com/entrecode/shiro-trie/commit/c1bcfcb))
+* chore: trim .gitignore to what this repo actually produces ([af42e9d](https://github.com/entrecode/shiro-trie/commit/af42e9d))
+* chore: update chai version with commonJS version ([0c83561](https://github.com/entrecode/shiro-trie/commit/0c83561))
+* chore: update dependencies and remove Travis CI configuration ([19e6c27](https://github.com/entrecode/shiro-trie/commit/19e6c27))
+* chore: update GitHub Actions badge to reflect new workflow name ([9aee943](https://github.com/entrecode/shiro-trie/commit/9aee943))
+* chore: update GitHub Actions to include feature branch for testing ([9b89ba9](https://github.com/entrecode/shiro-trie/commit/9b89ba9))
+* chore: update launch configuration to run backend tests ([a9118ea](https://github.com/entrecode/shiro-trie/commit/a9118ea))
+* chore: update Node.js versions in GitHub Actions workflow ([d88dbd5](https://github.com/entrecode/shiro-trie/commit/d88dbd5))
+* chore: update README and GitHub Actions workflow to reflect build status ([adc8217](https://github.com/entrecode/shiro-trie/commit/adc8217))
+* test: add new test cases for wildcard matching in shiro-trie ([e5462e5](https://github.com/entrecode/shiro-trie/commit/e5462e5))
+* test: add side-by-side benchmark harness for perf comparison ([e144d75](https://github.com/entrecode/shiro-trie/commit/e144d75))
+* test: drop meta-tests that don't exercise the library ([edcdee4](https://github.com/entrecode/shiro-trie/commit/edcdee4))
+* test: modernize var/function-expr to const-let/arrow ([ca628dc](https://github.com/entrecode/shiro-trie/commit/ca628dc))
+* ci: drop node-version matrix ([c305366](https://github.com/entrecode/shiro-trie/commit/c305366))
+* ci: drop stale feature/modernize branch trigger ([eb2222d](https://github.com/entrecode/shiro-trie/commit/eb2222d))
+* ci: gate prettier formatting in build-and-test workflow ([0e45a2c](https://github.com/entrecode/shiro-trie/commit/0e45a2c))
+* ci: replace coveralls-next + .coveralls.yml with official action ([e9e28d8](https://github.com/entrecode/shiro-trie/commit/e9e28d8))
+* refactor: drop unused _expand export and tighten coverage ([9caf9f6](https://github.com/entrecode/shiro-trie/commit/9caf9f6))
+* refactor: optimize performance in index.js by caching values and using modern syntax ([1edb53b](https://github.com/entrecode/shiro-trie/commit/1edb53b))
+* refactor: remove compressTrie function ([a28735c](https://github.com/entrecode/shiro-trie/commit/a28735c))
+* perf: optimize check, permissions, and trie memory via shared sentinels ([c6ff072](https://github.com/entrecode/shiro-trie/commit/c6ff072)), closes [Array#indexOf](https://github.com/Array/issues/indexOf)
+* fix: correct loop condition in _check function to prevent out-of-bounds access ([c9151a7](https://github.com/entrecode/shiro-trie/commit/c9151a7))
+
+### BREAKING CHANGE
+
+* check() no longer treats a short query as an implicit
+prefix match. In 0.4.x, check() silently appended a trailing * and
+returned true as long as the walk could descend the path. The new
+matcher requires the query to terminate at a leaf (or be covered by a
+* leaf above it), matching Shiro semantics.
+
+Example: a trie built from 'model:get:*:id1,id2' now returns false for
+check('model:get') — that permission only grants id1/id2 on any third
+segment, not full model:get. Use an explicit query like
+check('model:get:_id:id1') instead.
+
 ## 0.5.0 (2026-05-21)
 
 * feat: add legacy 'new' alias for newTrie function and update type definitions ([50c18d7](https://github.com/entrecode/shiro-trie/commit/50c18d7))
