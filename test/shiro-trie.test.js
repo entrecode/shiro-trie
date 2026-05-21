@@ -146,6 +146,15 @@ describe('shiro-trie node module', () => {
     });
   });
 
+  describe('legacy new() alias', () => {
+    it("ShiroTrie['new']() still produces a working trie", () => {
+      const trie = shiroTrie['new']();
+      trie.add('a:b:c');
+      expect(trie.check('a:b:c:d')).toBe(true);
+      expect(trie.check('x:y')).toBe(false);
+    });
+  });
+
   describe('more complex wildcard permissions', () => {
     it('test0', () => {
       expect(shiroTrie.newTrie().add('*').check('l1:l2:l3:l4:l5')).toBe(true);
