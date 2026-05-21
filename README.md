@@ -41,7 +41,7 @@ account1.permissions('nas:$:?'); // ['read']
 
 ## Performance
 
-`0.5.0` ships a rewrite of the matching internals. Representative speedups
+`1.0.0` ships a rewrite of the matching internals. Representative speedups
 against `0.4.x` on the same workload (Node 24, microbenchmark):
 
 | Operation                              |   Speedup |
