@@ -57,6 +57,26 @@ Absolute throughput is hardware-dependent, but the relative gains hold across
 the matching paths. Memory footprint of a populated trie also drops by roughly
 half thanks to shared `LEAF` / `TERMINATOR` sentinels.
 
+## Upgrading from 0.4.x: stricter `check()` semantics
+
+`1.0.0` tightened `check()` to match Apache Shiro semantics: the query must
+terminate at a leaf (or be covered by a `*` leaf above it). Earlier versions
+silently appended a trailing `*` and returned `true` whenever the walk could
+descend the path, which could report broader access than was actually granted.
+
+For a trie built from `model:get:*:id1,id2`:
+
+| Query                        | 0.4.x  | 1.0.0   |
+| ---------------------------- | ------ | ------- |
+| `check('model:get')`         | `true` | `false` |
+| `check('model:get:_id')`     | `true` | `false` |
+| `check('model:get:_id:id1')` | `true` | `true`  |
+| `check('model:get:foo:id1')` | `true` | `true`  |
+
+If you relied on the old prefix-match behavior, replace under-specified queries
+with either an explicit wildcard (`check('model:get:*')`) or a `permissions()`
+call (`permissions('model:get:?')`) to express the "any sub-right" intent.
+
 ## Defining permissions
 
 See [Understanding Permissions in Apache Shiro](http://shiro.apache.org/permissions.html) for a short introduction to Shiro Syntax. Basically, you can describe a permission hierarchy using `:` as separator.
