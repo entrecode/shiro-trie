@@ -1,3 +1,15 @@
+## <small>1.0.1 (2026-07-07)</small>
+
+* chore: bump to 1.0.1 ([11dbe56](https://github.com/entrecode/shiro-trie/commit/11dbe56))
+* docs: correct 1.0.0 check() migration table and workaround ([a4a422f](https://github.com/entrecode/shiro-trie/commit/a4a422f))
+* docs: document 1.0.0 check() breaking change with migration table ([f4b741f](https://github.com/entrecode/shiro-trie/commit/f4b741f))
+* docs: regenerate CHANGELOG for 1.0.0 ([48983d3](https://github.com/entrecode/shiro-trie/commit/48983d3))
+* fix: export ESM 'new' alias and correct dual-package types ([9f2f0ab](https://github.com/entrecode/shiro-trie/commit/9f2f0ab))
+* fix: grant wildcard access for a trailing '*' in comma lists ([a22a8c7](https://github.com/entrecode/shiro-trie/commit/a22a8c7))
+* fix: prevent prototype pollution from permission segments ([4e3eeb4](https://github.com/entrecode/shiro-trie/commit/4e3eeb4))
+* refactor: drop duplicated fast paths and default-export copy ([c9b2286](https://github.com/entrecode/shiro-trie/commit/c9b2286))
+* perf: dedupe '$' permission enumeration with a Set ([a136df4](https://github.com/entrecode/shiro-trie/commit/a136df4))
+
 ## 1.0.0 (2026-05-21)
 
 * feat!: bump to 1.0.0 ([01e737f](https://github.com/entrecode/shiro-trie/commit/01e737f))
