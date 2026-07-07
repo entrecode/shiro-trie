@@ -212,11 +212,15 @@ const _permissions = (trie, parts, idx) => {
   if (current === DOLLAR) {
     const keys = Object.keys(trie);
     const out = [];
+    const seen = new Set();
     for (let i = 0; i < keys.length; i++) {
       const sub = _permissions(trie[keys[i]], parts, idx + 1);
       for (let j = 0; j < sub.length; j++) {
         const v = sub[j];
-        if (v !== STAR && out.indexOf(v) === -1) out.push(v);
+        if (v !== STAR && !seen.has(v)) {
+          seen.add(v);
+          out.push(v);
+        }
       }
     }
     return out;
