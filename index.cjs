@@ -175,32 +175,6 @@ const _permissions = (trie, parts, idx) => {
     const keys = Object.keys(trie);
     if (idx + 1 >= parts.length) return keys;
     const out = [];
-    if (idx + 2 >= parts.length) {
-      const tail = parts[idx + 1];
-      if (tail === DOLLAR) {
-        for (let i = 0; i < keys.length; i++) {
-          const sub = trie[keys[i]];
-          if (sub[STAR] !== undefined) {
-            out.push(keys[i]);
-            continue;
-          }
-          for (const k in sub) {
-            if (k !== STAR) {
-              out.push(keys[i]);
-              break;
-            }
-          }
-        }
-      } else {
-        for (let i = 0; i < keys.length; i++) {
-          const sub = trie[keys[i]];
-          if (sub[STAR] !== undefined || sub[tail] !== undefined) {
-            out.push(keys[i]);
-          }
-        }
-      }
-      return out;
-    }
     for (let i = 0; i < keys.length; i++) {
       if (_matches(trie[keys[i]], parts, idx + 1)) {
         out.push(keys[i]);
@@ -292,22 +266,6 @@ class ShiroTrie {
    * @returns {ShiroTrie}
    */
   add(...args) {
-    if (args.length === 1) {
-      const a = args[0];
-      if (typeof a === 'string') {
-        _add(this.data, a.split(COLON), 0);
-        return this;
-      }
-      if (Array.isArray(a)) {
-        for (let i = 0; i < a.length; i++) {
-          const item = a[i];
-          if (typeof item === 'string') _add(this.data, item.split(COLON), 0);
-        }
-        return this;
-      }
-      return this;
-    }
-
     for (let i = 0; i < args.length; i++) {
       const arg = args[i];
       if (typeof arg === 'string') {
@@ -364,4 +322,4 @@ class ShiroTrie {
 const newTrie = () => new ShiroTrie();
 
 module.exports = { newTrie, new: newTrie };
-module.exports.default = { newTrie, new: newTrie };
+module.exports.default = module.exports;
