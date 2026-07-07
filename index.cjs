@@ -4,9 +4,11 @@ const DOLLAR = '$';
 const COLON = ':';
 const COMMA = ',';
 
-const EMPTY_ARRAY = [];
+const EMPTY_ARRAY = Object.freeze([]);
 
-const newNode = () => ({});
+// Null-prototype nodes so permission segments like `__proto__` / `constructor`
+// are stored as plain own keys instead of walking (or polluting) Object.prototype.
+const newNode = () => Object.create(null);
 
 const LEAF = Object.freeze({});
 const TERMINATOR = Object.freeze({ [STAR]: LEAF });
