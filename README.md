@@ -69,13 +69,17 @@ For a trie built from `model:get:*:id1,id2`:
 | Query                        | 0.4.x  | 1.0.0   |
 | ---------------------------- | ------ | ------- |
 | `check('model:get')`         | `true` | `false` |
-| `check('model:get:_id')`     | `true` | `false` |
 | `check('model:get:_id:id1')` | `true` | `true`  |
 | `check('model:get:foo:id1')` | `true` | `true`  |
 
-If you relied on the old prefix-match behavior, replace under-specified queries
-with either an explicit wildcard (`check('model:get:*')`) or a `permissions()`
-call (`permissions('model:get:?')`) to express the "any sub-right" intent.
+The under-specified prefix query now returns `false`, while fully-specified
+queries that terminate at a stored leaf are unaffected.
+
+If you relied on the old prefix-match behavior, either check a fully-specified
+permission (e.g. `check('model:get:foo:id1')`) or use `permissions('model:get:?')`
+to enumerate the granted sub-rights — note that `check('model:get:*')` does **not**
+match this trie, because its `*` sits above further `id1,id2` levels rather than
+at a leaf.
 
 ## Defining permissions
 
