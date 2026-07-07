@@ -57,6 +57,12 @@ const _add = (trie, array, from) => {
       const tailEmpty = tailFrom >= end;
       for (let j = 0; j < values.length; j++) {
         const value = values[j];
+        // A trailing `*` alternative grants wildcard-leaf access on this node,
+        // exactly like the same permission added without the comma list.
+        if (tailEmpty && value === STAR) {
+          node[STAR] = LEAF;
+          continue;
+        }
         const existing = node[value];
         if (existing === undefined) {
           if (tailEmpty) {
